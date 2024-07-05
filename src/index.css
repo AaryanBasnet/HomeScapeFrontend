@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    font-family: 'Dosis', sans-serif;
+
+}
+.glassmorphism {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+
+@layer base {
+    
+    .dropdown {
+      @apply w-full lg:max-w-[296px] cursor-pointer;
+    }
+    .dropdown-btn {
+      @apply flex h-[64px] items-center px-[18px] border rounded-lg;
+    }
+    .dropdown-icon-primary {
+      @apply text-2xl mr-[18px] text-violet-700;
+    }
+    .dropdown-icon-secondary {
+      @apply text-2xl text-violet-700 ml-auto;
+    }
+    .dropdown-menu {
+      @apply px-6 py-8 text-[15px] space-y-6 shadow-md bg-white absolute w-full z-10 list-none rounded-b-lg;
+    }
+  }

@@ -1,0 +1,7 @@
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="150" cy="25" r="3" fill="#7F56D9"/>
+  
+  <!-- Text "HomeScape" -->
+  <text x="10" y="30" font-family="Arial" font-size="24" fill="#101828">HomeScape</text>
+</svg>
