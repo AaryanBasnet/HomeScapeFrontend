@@ -1,5 +1,7 @@
 import React from 'react';
 import Navbar from '../website/NavBar'
+import Footer from '../website/Footer';
+
 
 import house1 from '../assets/img/houses/house1lg.png';
 import house2 from '../assets/img/houses/house2lg.png';
@@ -47,6 +49,9 @@ const About = () => {
         </div>
       </div>
     </div>
+    <div className=''>
+        <Footer />
+      </div>
     </>
   );
 };

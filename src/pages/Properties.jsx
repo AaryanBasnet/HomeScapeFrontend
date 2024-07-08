@@ -5,6 +5,8 @@ import Search from '../website/Search';
 import Navbar from '../website/NavBar'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Footer from '../website/Footer';
+
 
 const Properties = () => {
   const [homes, setHomes] = useState([]);
@@ -42,6 +44,9 @@ const Properties = () => {
         
       </div>
     </section>
+    <div className=''>
+        <Footer />
+      </div>
     </>
   );
 };

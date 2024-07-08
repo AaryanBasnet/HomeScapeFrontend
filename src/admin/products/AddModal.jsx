@@ -4,7 +4,6 @@ import Dropdown from './Dropdown';
 
 const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   const [formData, setFormData] = useState({
-    image: '',
     price: '',
     name: '',
     address: '',
@@ -17,6 +16,9 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
     agentId: '',
   });
 
+  const [image, setImage] = useState(null);
+  const [message, setMessage] = useState('');
+  const [homes, setHomes] = useState([]);
   const [agents, setAgents] = useState([]);
   const [selectedAgent, setSelectedAgent] = useState(null);
 
@@ -37,6 +39,15 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
 
     fetchAgents();
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setHomeData({ ...homeData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
   useEffect(() => {
     if (selectedHome) {

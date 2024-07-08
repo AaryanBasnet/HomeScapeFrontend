@@ -12,11 +12,18 @@ function Card({ home, onEdit, onDelete }) {
     <div className="m-4 flex justify-center items-center">
       <div className="card card-compact border rounded-md w-64 bg-base-100 shadow-xl">
         <figure>
-          <img
-            className="rounded-t-md w-full h-40 object-cover"
-            src={home.image}
-            alt={home.name}
-          />
+        {home.imageData && (
+                <img
+                  src={`http://localhost:8080/home/image/${home.homeId}`}
+                  alt={home.name}
+                  className="w-full h-48 object-cover mb-4 rounded-md"
+                  onError={(e) => {
+                    console.error(`Error loading image for home ${home.homeId}`);
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+                  }}
+                />
+              )}
         </figure>
         <div className="card-body p-4">
           <div className="flex justify-between items-center">

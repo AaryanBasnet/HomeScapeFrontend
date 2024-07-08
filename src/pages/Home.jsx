@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HouseList from '../website/HouseList';
 import LandingPage from '../website/LandingPage';
+import Footer from '../website/Footer';
 
 const Home = () => {
   return (
@@ -14,6 +15,9 @@ const Home = () => {
             Show More
           </Link>
         </div>
+      </div>
+      <div className=''>
+        <Footer />
       </div>
     </div>
   );

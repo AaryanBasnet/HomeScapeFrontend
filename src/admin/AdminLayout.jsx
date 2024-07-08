@@ -18,7 +18,7 @@ const AdminLayout = () => (
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="products" element={<Products />} />
-          <Route path="members" element={<Customers />} />
+          <Route path="customers" element={<Customers />} />
           <Route path="orders" element={<Orders />} />
         </Routes>
       </Suspense>

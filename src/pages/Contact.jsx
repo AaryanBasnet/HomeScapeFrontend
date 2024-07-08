@@ -1,5 +1,7 @@
 import React from 'react';
 import Navbar from '../website/NavBar';
+import Footer from '../website/Footer';
+
 
 const Contact = () => {
   return (
@@ -67,6 +69,9 @@ const Contact = () => {
           </form>
         </div>
       </section>
+      <div className=''>
+        <Footer />
+      </div>
       
     </>
   );
