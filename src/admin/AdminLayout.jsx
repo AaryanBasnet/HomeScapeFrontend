@@ -7,6 +7,10 @@ const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 const Products = lazy(() => import('./products/Products'));
 const Customers = lazy(() => import('./members/Customers'));
 const Orders = lazy(() => import('./orders/Orders'));
+const Contact = lazy(() => import('./support/Contact'));
+
+const AddAdmin = lazy(() => import('./addAdmin/AddAdmin'));
+
 
 const AdminLayout = () => (
   <div className="flex h-screen bg-white dark:bg-zinc-200">
@@ -20,6 +24,8 @@ const AdminLayout = () => (
           <Route path="products" element={<Products />} />
           <Route path="customers" element={<Customers />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="addadmin" element={<AddAdmin />} />
+          <Route path="support" element={<Contact />} />
         </Routes>
       </Suspense>
     </div>

@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../website/NavBar';
 import Footer from '../website/Footer';
-
+import axios from 'axios';
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+
+    if (!token) {
+      alert('Please log in to send a message');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/contact',
+        {
+          name,
+          email,
+          message,
+          customerId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        alert('Message sent successfully');
+        setName('');
+        setEmail('');
+        setMessage('');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message');
+    }
+  };
+
   return (
     <>
-    
       <Navbar />
       <section className="text-gray-600 body-font relative">
         <div className="container px-5 py-5 mx-auto">
@@ -14,31 +54,31 @@ const Contact = () => {
             <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Contact Us</h1>
             <p className="lg:w-2/3 mx-auto ">Please get in touch</p>
           </div>
-          <form  method="post">
+          <form onSubmit={handleSubmit}>
             <div className="lg:w-1/2 md:w-2/3 mx-auto">
               <div className="flex flex-wrap -m-4">
                 <div className="p-2 w-1/2">
                   <div className="relative">
                     <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
-                    <input type="text" id="name" name="name" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                    <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                   </div>
                 </div>
                 <div className="p-2 w-1/2">
                   <div className="relative">
                     <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
-                    <input type="email" id="email" name="email" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                    <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                   </div>
                 </div>
                 <div className="p-2 w-full">
                   <div className="relative">
                     <label htmlFor="message" className="leading-7 text-sm text-gray-600">Message</label>
-                    <textarea id="message" name="message" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                    <textarea id="message" name="message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                   </div>
                 </div>
                 <div className="p-2 w-full">
-                  <button className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Send</button>
+                  <button type="submit" className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Send</button>
                 </div>
-                <div className="p-2 w-full pt-6  border-t border-gray-200 text-center">
+                <div className="p-2 w-full pt-6 border-t border-gray-200 text-center">
                   <p className="leading-normal my-5"> Sirutar.<br />Bhaktapur, MN 56301</p>
                   <span className="inline-flex">
                     <a className="text-gray-500" href="https://www.facebook.com">
@@ -69,10 +109,7 @@ const Contact = () => {
           </form>
         </div>
       </section>
-      <div className=''>
-        <Footer />
-      </div>
-      
+      <Footer />
     </>
   );
 };

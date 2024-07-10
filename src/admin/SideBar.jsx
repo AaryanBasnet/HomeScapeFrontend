@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   HelpCircleIcon,
   House,
+  PlusCircleIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 // import ArrowRight from "../assets/right-arrow.png";
@@ -51,6 +52,11 @@ const navLinks = [
     link: "/admin/support",
     label: "Support",
     icon: HelpCircleIcon,
+  },
+  {
+    link: "/admin/addadmin",
+    label: "AddAdmin",
+    icon: PlusCircleIcon,
   },
 ];
 

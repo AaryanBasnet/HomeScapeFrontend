@@ -18,11 +18,14 @@ const SignInSignUpForm = () => {
         username,
         password,
       });
-      // Simulate successful authentication
-      localStorage.setItem("token", response.data.accessToken); // Example: Using localStorage for simplicity
-
-      // Redirect to admin dashboard
-      navigate("/admin/dashboard");
+  
+      const { accessToken, userId, roles } = response.data;
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("roles", JSON.stringify(roles));
+  
+      const role = roles.includes("ADMIN") ? "/admin/dashboard" : "/home";
+      navigate(role);
       window.location.reload();
     } catch (error) {
       alert("Invalid credentials. Please try again.");
@@ -37,7 +40,7 @@ const SignInSignUpForm = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/register", {
+      const response = await axios.post("http://localhost:8080/api/auth/register/user", {
         username: username,
         password: password,
         confirm_password: confirmPassword,
@@ -45,7 +48,7 @@ const SignInSignUpForm = () => {
   
       if (response.status === 200) {
         alert("Registration successful!");
-        setIsSignUp(false); // Switch back to login view after successful registration
+        setIsSignUp(false); 
       } else {
         alert("Registration failed. Please try again.");
       }

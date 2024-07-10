@@ -1,17 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import UserDropdown from "./UserDropdown"; // Import the UserDropdown component
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("home");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const userRoles = JSON.parse(localStorage.getItem("roles"));
+  
+    if (token) {
+      setIsLoggedIn(true);
+      setRole(userRoles.includes("ADMIN") ? "ADMIN" : "USER");
+    }
+  }, []);
+  
 
   const handleSetActive = (section) => {
     setActive(section);
   };
 
   return (
-    <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-50"> {/* Updated z-index */}
+    <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-50">
       <div className="text-2xl font-dosis font-bold text-black bg-opacity-0">
         <Link to="/" onClick={() => handleSetActive("home")}>HomeScape</Link>
       </div>
@@ -36,9 +50,13 @@ const Navbar = () => {
         }}
         className="hidden md:block"
       >
-        <Link to="/signin" className="text-white bg-violet-600 py-2 px-4 rounded-3xl hover:bg-violet-700">
-          Get Started
-        </Link>
+        {isLoggedIn ? (
+          <UserDropdown />
+        ) : (
+          <Link to="/signin" className="text-white bg-violet-600 py-2 px-4 rounded-3xl hover:bg-violet-700">
+            Get Started
+          </Link>
+        )}
       </motion.div>
       <button
         className="md:hidden text-black focus:outline-none"
@@ -60,7 +78,7 @@ const Navbar = () => {
         </svg>
       </button>
       {isOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full glassmorphism rounded-lg p-4 z-50"> {/* Updated z-index */}
+        <div className="md:hidden absolute top-16 left-0 w-full glassmorphism rounded-lg p-4 z-50">
           {["home", "about", "properties", "contact"].map((section) => (
             <Link
               key={section}
@@ -76,9 +94,15 @@ const Navbar = () => {
               {section.charAt(0).toUpperCase() + section.slice(1)}
             </Link>
           ))}
-          <Link to="/signin">
-            <button className="w-full text-black py-2 px-4 rounded-lg hover:bg-opacity-20 mt-4">Get Started</button>
-          </Link>
+          {isLoggedIn ? (
+            <UserDropdown />
+          ) : (
+            <Link to="/signin">
+              <button className="w-full text-black py-2 px-4 rounded-lg hover:bg-opacity-20 mt-4">
+                Get Started
+              </button>
+            </Link>
+          )}
         </div>
       )}
     </nav>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Dropdown from "./Dropdown";
 
 const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   const [homeData, setHomeData] = useState({
@@ -16,10 +15,13 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
     agent: { agentId: "" },
   });
   const [image, setImage] = useState(null);
-  const [message, setMessage] = useState("");
-  const [homes, setHomes] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [selectedAgent, setSelectedAgent] = useState(null);
+
+  useEffect(() => {
+    if (selectedHome) {
+      setHomeData(selectedHome);
+    }
+  }, [selectedHome]);
 
   useEffect(() => {
     async function fetchAgents() {
@@ -32,12 +34,12 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
         }
       } catch (error) {
         console.error("Error fetching agents:", error);
-        // Handle error fetching agents
       }
     }
 
     fetchAgents();
   }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setHomeData({ ...homeData, [name]: value });
@@ -102,8 +104,8 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       }
       console.log("Response:", response.data);
 
-      closeModal(); // Close modal after successful submission
-      fetchHomes(); // Refresh the homes list
+      closeModal();
+      fetchHomes();
     } catch (error) {
       if (error.response) {
         console.error("Server responded with error:", error.response.data);
@@ -116,8 +118,9 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   };
 
   const closeModal = () => {
-    setIsOpen(false); // Close modal using setIsOpen from props
+    setIsOpen(false);
   };
+
   return (
     <div
       className={`fixed inset-0 overflow-y-auto ${isOpen ? "block" : "hidden"}`}
@@ -142,7 +145,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                   <input
                     type="text"
                     name="name"
-                    id="name "
+                    id="name"
                     value={homeData.name}
                     onChange={handleInputChange}
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
@@ -212,7 +215,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-2 sm:col-span-2">
                   <label
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700"
@@ -228,36 +231,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label
-                    htmlFor="image"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Image URL
-                  </label>
-                  <input
-                    type="file"
-                    onChange={handleImageChange}
-                    className="w-full px-3 py-2 border rounded-md"
-                    required
-                  />{" "}
-                </div>
-                <div className="col-span-2">
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    id="description"
-                    value={homeData.description}
-                    onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  ></textarea>
-                </div>
-                <div className="col-span-2">
+                <div className="col-span-2 sm:col-span-1">
                   <label
                     htmlFor="city"
                     className="block text-sm font-medium text-gray-700"
@@ -273,7 +247,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-2 sm:col-span-1">
                   <label
                     htmlFor="type"
                     className="block text-sm font-medium text-gray-700"
@@ -289,18 +263,34 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-2 sm:col-span-2">
                   <label
-                    htmlFor="agentDropdown"
+                    htmlFor="description"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    id="description"
+                    value={homeData.description}
+                    onChange={handleInputChange}
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="col-span-2 sm:col-span-2">
+                  <label
+                    htmlFor="agent"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Agent
                   </label>
                   <select
+                    name="agent"
+                    id="agent"
                     value={homeData.agent.agentId}
                     onChange={handleAgentSelect}
-                    className="bg-blue-500 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    required
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
                   >
                     <option value="">Select an agent</option>
                     {agents.map((agent) => (
@@ -310,6 +300,21 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     ))}
                   </select>
                 </div>
+                <div className="col-span-2 sm:col-span-2">
+                  <label
+                    htmlFor="image"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Image
+                  </label>
+                  <input
+                    type="file"
+                    name="image"
+                    id="image"
+                    onChange={handleImageChange}
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -317,18 +322,17 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                 type="submit"
                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                Save
+                {selectedHome ? "Update" : "Add"}
               </button>
               <button
-                onClick={() => setIsOpen(false)}
                 type="button"
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                onClick={closeModal}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
               >
                 Cancel
               </button>
             </div>
           </form>
-          {message && <p className="mt-4 text-red-500">{message}</p>}
         </div>
       </div>
     </div>

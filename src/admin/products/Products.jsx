@@ -8,23 +8,36 @@ function Products() {
   const [selectedHome, setSelectedHome] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchHomes();
   }, []);
 
   const fetchHomes = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get('http://localhost:8080/home/get');
       setHomes(response.data);
+      setError(null);
     } catch (error) {
       console.error('Error fetching homes:', error);
+      setError('Failed to fetch homes. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleAdd = (newHome) => {
-    setHomes((prevHomes) => [...prevHomes, newHome]);
-    setIsAdding(false); // Close AddModal after adding a new home
+  const handleAdd = async (newHome) => {
+    try {
+      const response = await axios.post('http://localhost:8080/home/save', newHome);
+      setHomes((prevHomes) => [...prevHomes, response.data]);
+      setIsAdding(false); // Close AddModal after adding a new home
+    } catch (error) {
+      console.error('Error adding home:', error);
+      // Handle error adding home
+    }
   };
 
   const handleEdit = (home) => {
@@ -36,13 +49,15 @@ function Products() {
     try {
       await axios.delete(`http://localhost:8080/home/delete/${id}`);
       setHomes((prevHomes) => prevHomes.filter((home) => home.id !== id));
-      fetchHomes(); // Refresh homes list after deletion
+      // No need to call fetchHomes() again since setHomes already updates the list
     } catch (error) {
       console.error('Error deleting home:', error);
+      // Handle error deleting home
     }
   };
 
   const openAddModal = () => {
+    setSelectedHome(null); // Ensure selectedHome is reset when opening the modal for adding
     setIsAdding(true);
   };
 
@@ -67,9 +82,13 @@ function Products() {
         </button>
         <AddModal isOpen={isAdding || isEditing} setIsOpen={closeModal} selectedHome={selectedHome} fetchHomes={fetchHomes} />
       </div>
-      <div>
+      {isLoading ? (
+        <p className="text-gray-600">Loading...</p>
+      ) : error ? (
+        <p className="text-red-600">{error}</p>
+      ) : (
         <HomeList homes={homes} onEdit={handleEdit} onDelete={handleDelete} />
-      </div>
+      )}
     </div>
   );
 }
