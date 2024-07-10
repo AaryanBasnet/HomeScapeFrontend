@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Dropdown from '../products/Dropdown';
-
 
 const Customers = () => {
   const [homeData, setHomeData] = useState({
@@ -14,13 +12,12 @@ const Customers = () => {
     city: '',
     description: '',
     type: '',
-    agentId: ''
+    agent: { agentId: '' }
   });
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState('');
   const [homes, setHomes] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [selectedAgent, setSelectedAgent] = useState(null);
 
   useEffect(() => {
     async function fetchAgents() {
@@ -33,20 +30,11 @@ const Customers = () => {
         }
       } catch (error) {
         console.error('Error fetching agents:', error);
-        // Handle error fetching agents
       }
     }
 
     fetchAgents();
   }, []);
-  const handleAgentSelect = (agentId) => {
-    const selectedAgentObj = agents.find(agent => agent.id === agentId);
-    setSelectedAgent(selectedAgentObj);
-    setHomeData(prev => ({
-      ...prev,
-      agentId: agentId.toString(),
-    }));
-  };
 
   useEffect(() => {
     fetchHomes();
@@ -70,15 +58,32 @@ const Customers = () => {
     setImage(e.target.files[0]);
   };
 
+  const handleAgentSelect = (event) => {
+    const agentId = event.target.value;
+    setHomeData(prev => ({
+      ...prev,
+      agent: { agentId: agentId }
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formattedHomeData = {
+      ...homeData,
+      price: Number(homeData.price),
+      bathrooms: Number(homeData.bathrooms),
+      bedrooms: Number(homeData.bedrooms),
+      surface: Number(homeData.surface),
+      agent: { agentId: Number(homeData.agent.agentId) }
+    };
+
     const formData = new FormData();
-    formData.append('home', new Blob([JSON.stringify(homeData)], { type: 'application/json' }));
+    formData.append('home', new Blob([JSON.stringify(formattedHomeData)], { type: 'application/json' }));
     formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:8080/home/save', formData, {
+      const response = await axios.post('http://localhost:8080/home/save', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -86,6 +91,7 @@ const Customers = () => {
       setMessage('Home created successfully!');
       fetchHomes();
     } catch (error) {
+      console.error('Error creating home:', error);
       setMessage('Failed to create home. Please try again.');
     }
   };
@@ -184,11 +190,20 @@ const Customers = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Agent ID</label>
-            <Dropdown
-                    onSelect={handleAgentSelect}
-                    selectedOption={selectedAgent}
-                  />
+            <label className="block text-gray-700 mb-2">Agent</label>
+            <select
+              value={homeData.agent.agentId}
+              onChange={handleAgentSelect}
+              className="bg-blue-500 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              required
+            >
+              <option value="">Select an agent</option>
+              {agents.map(agent => (
+                <option key={agent.agentId} value={agent.agentId}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-4 col-span-2">
             <label className="block text-gray-700 mb-2">Description</label>
@@ -215,8 +230,6 @@ const Customers = () => {
         </button>
       </form>
       {message && <p className="mt-4 text-red-500">{message}</p>}
-
-      
     </div>
   );
 };

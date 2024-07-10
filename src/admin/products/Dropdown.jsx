@@ -3,7 +3,6 @@ import axios from 'axios';
 
 export default function Dropdown({ onSelect, selectedOption }) {
   const [agents, setAgents] = useState([]);
-  const [selectedAgent, setSelectedAgent] = useState('');
 
   useEffect(() => {
     async function fetchAgents() {
@@ -16,31 +15,16 @@ export default function Dropdown({ onSelect, selectedOption }) {
         }
       } catch (error) {
         console.error('Error fetching agents:', error);
-        // Handle error fetching agents
       }
     }
 
     fetchAgents();
   }, []);
 
-  useEffect(() => {
-    if (selectedOption) {
-      setSelectedAgent(selectedOption.name); // Set the selected agent name
-    } else {
-      setSelectedAgent(''); // Reset selected agent name
-    }
-  }, [selectedOption]);
-
   const handleSelectChange = (event) => {
     const selectedAgentId = parseInt(event.target.value);
     const selectedAgentObj = agents.find(agent => agent.agentId === selectedAgentId);
-    if (selectedAgentObj) {
-      setSelectedAgent(selectedAgentObj.name); // Update selected agent name
-      onSelect(selectedAgentId);
-    } else {
-      setSelectedAgent('');
-      onSelect(null);
-    }
+    onSelect(selectedAgentObj); // Pass selected agent object to parent component
   };
 
   return (
@@ -52,7 +36,7 @@ export default function Dropdown({ onSelect, selectedOption }) {
         onChange={handleSelectChange}
         className="bg-blue-500 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       >
-        <option value="" disabled={!selectedOption} hidden>Select an agent</option>
+        <option value="" disabled hidden>Select an agent</option>
         {agents.map(agent => (
           <option key={agent.agentId} value={agent.agentId}>
             {agent.name}
