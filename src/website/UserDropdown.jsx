@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useAuth } from "./AuthContext";
 
 const UserDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [roles, setRoles] = useState([]);
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
 
   useEffect(() => {
     const fetchUserData = async () => {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
-      
+     
       if (userId && token) {
         try {
           const response = await axios.get(`http://localhost:8080/customer/get/${userId}`, {
@@ -29,12 +32,20 @@ const UserDropdown = () => {
         }
       }
     };
-  
+ 
     fetchUserData();
   }, []);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("roles");
+    setIsLoggedIn(false);
+    navigate("/");
   };
 
   return (
@@ -97,12 +108,12 @@ const UserDropdown = () => {
             </li>
           </ul>
           <div className="py-1">
-            <Link
-              to="/logout"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+            <button
+              onClick={handleSignOut}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white w-full text-left"
             >
               Sign out
-            </Link>
+            </button>
           </div>
         </div>
       )}

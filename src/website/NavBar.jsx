@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import UserDropdown from "./UserDropdown"; // Import the UserDropdown component
+import UserDropdown from "./UserDropdown"; 
+import { useAuth } from "./AuthContext";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("home");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState("");
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const userRoles = JSON.parse(localStorage.getItem("roles"));
-  
-    if (token) {
-      setIsLoggedIn(true);
-      setRole(userRoles.includes("ADMIN") ? "ADMIN" : "USER");
-    }
-  }, []);
-  
+  const { isLoggedIn, isLoading } = useAuth();
 
   const handleSetActive = (section) => {
     setActive(section);
   };
 
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
   return (
     <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-50">
       <div className="text-2xl font-dosis font-bold text-black bg-opacity-0">

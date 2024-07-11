@@ -11,7 +11,6 @@ const Inquiry = () => {
     axios.get('http://localhost:8080/api/inquiry')
       .then(response => {
         setInquiry(response.data.data);
-        console.log(response.data.data);
         setLoading(false);
       })
       .catch(error => {
@@ -32,7 +31,9 @@ const Inquiry = () => {
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
               <tr>
-                <th className="px-4 py-2 border-b">Name</th>
+                <th className="px-4 py-2 border-b">House Name</th>
+                <th className="px-4 py-2 border-b">Agent Name</th>
+                <th className="px-4 py-2 border-b">Customer Name</th>
                 <th className="px-4 py-2 border-b">Email</th>
                 <th className="px-4 py-2 border-b">Message</th>
               </tr>
@@ -40,6 +41,8 @@ const Inquiry = () => {
             <tbody>
               {inquiry.map((inquiry) => (
                 <tr key={inquiry.id} className="hover:bg-gray-100">
+                  <td className="px-4 py-2 border-b">{inquiry.home.name}</td>
+                  <td className="px-4 py-2 border-b">{inquiry.home.agent.name}</td>
                   <td className="px-4 py-2 border-b">{inquiry.name}</td>
                   <td className="px-4 py-2 border-b">{inquiry.email}</td>
                   <td className="px-4 py-2 border-b">{inquiry.message}</td>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for API calls
+import axios from 'axios';
 import loginImage from "../assets/img/houses/house1lg.png";
 import Logo from "../assets/img/houses/house2lg.png";
 
@@ -11,6 +11,30 @@ const SignInSignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkTokenAndRefresh = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.post("http://localhost:8080/api/auth/refresh", null, {
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          });
+          const newAccessToken = response.data;
+          localStorage.setItem("token", newAccessToken);
+        } catch (error) {
+          console.error("Failed to refresh token:", error);
+          alert("Failed to refresh token. Please log in again.");
+          // localStorage.removeItem("token");
+          // navigate("/login");
+        }
+      }
+    };
+  
+    checkTokenAndRefresh();
+  }, []);
+
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
@@ -19,9 +43,9 @@ const SignInSignUpForm = () => {
         password,
       });
   
-      const { accessToken, userId, roles } = response.data;
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("userId", userId);
+      const { token, id, roles } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", id);
       localStorage.setItem("roles", JSON.stringify(roles));
   
       const role = roles.includes("ADMIN") ? "/admin/dashboard" : "/home";
@@ -31,24 +55,24 @@ const SignInSignUpForm = () => {
       alert("Invalid credentials. Please try again.");
     }
   };
-
+  
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match. Please try again.");
       return;
     }
-  
+
     try {
       const response = await axios.post("http://localhost:8080/api/auth/register/user", {
         username: username,
         password: password,
         confirm_password: confirmPassword,
       });
-  
+
       if (response.status === 200) {
         alert("Registration successful!");
-        setIsSignUp(false); 
+        setIsSignUp(false);
       } else {
         alert("Registration failed. Please try again.");
       }
@@ -57,7 +81,6 @@ const SignInSignUpForm = () => {
       alert("Registration failed. Please try again.");
     }
   };
-  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">

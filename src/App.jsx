@@ -25,7 +25,6 @@ const App = () => {
     }
     setLoading(false);
   }, []);
-
   if (isLoading) return <div>Loading...</div>;
 
   const router = createBrowserRouter([

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-// import Logo from "../assets/gymkhanalogo.png";
-import { GiMeat } from "react-icons/gi";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeftRightIcon,
   PackageOpen,
@@ -12,15 +10,14 @@ import {
   PlusCircleIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
-// import ArrowRight from "../assets/right-arrow.png";
 import { FaArrowRight } from "react-icons/fa";
+import { FaHouseChimney } from "react-icons/fa6";
+import { BiLogOut } from "react-icons/bi";
 
 const variants = {
   expanded: { width: "220px" },
   nonexpanded: { width: "60px" },
 };
-import { FaHouseChimney } from "react-icons/fa6";
-
 
 const navLinks = [
   {
@@ -39,8 +36,8 @@ const navLinks = [
     icon: House,
   },
   {
-    link: "/admin/orders",
-    label: "Orders",
+    link: "/admin/inquiry",
+    label: "Inquiry",
     icon: PackageOpen,
   },
   {
@@ -64,6 +61,8 @@ function SideBar() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Adjust this based on your authentication logic
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,6 +75,15 @@ function SideBar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("roles");
+    setIsLoggedIn(false);
+    navigate("/");
+    console.log("User logged out");
+  };
 
   return (
     <motion.div
@@ -90,20 +98,18 @@ function SideBar() {
         onClick={() => setIsExpanded(!isExpanded)}
         className="cursor-pointer absolute -right-3 top-10 rounded-full w-6 h-6 bg-[#FF8C8C] md:flex hidden justify-center items-center"
       >
-        {/* <img src={ArrowRight} className="w-2" alt="Toggle Sidebar" /> */}
         <FaArrowRight className="text-white" />
       </div>
 
       <div className="logo-div flex space-x-4 items-center">
-        {/* <img src={Logo} className="md:w-6 w-4 ml-2" alt="Logo" /> */}
-        <FaHouseChimney className="text-red-900  sm:text-2xl md:w-6 w-4 ml-2 " />
+        <FaHouseChimney className="text-red-900 sm:text-2xl md:w-6 w-4 ml-2" />
         <span className={!isExpanded ? "hidden" : "block"}>
           <span className="text-black text-md">Home</span>
           <span className="text-blue-600 text-md">Scape</span>
-        </span>{" "}
+        </span>
       </div>
 
-      <div className="flex flex-col space-y-8 mt-12">
+      <div className="flex flex-col space-y-8 mt-12 flex-grow">
         {navLinks.map((item, index) => (
           <div className="nav-links w-full" key={index}>
             <Link to={item.link} className="flex items-center gap-3">
@@ -113,7 +119,7 @@ function SideBar() {
                   "flex space-x-3 w-full p-2 rounded " +
                   (activeIndex === index
                     ? "bg-[#FF8C8C] text-white"
-                    : " text-black") +
+                    : "text-black") +
                   (!isExpanded ? " pl-3" : "")
                 }
               >
@@ -125,6 +131,21 @@ function SideBar() {
             </Link>
           </div>
         ))}
+        <div
+          onClick={handleLogout}
+          className={
+            "flex space-x-3 w-full p-2 rounded cursor-pointer text-black" +
+            (!isExpanded ? " pl-3" : "")
+          }
+        >
+          <BiLogOut className="md:w-6 w-4" />
+          <button
+            className={!isExpanded ? "hidden" : "block"}
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </motion.div>
   );

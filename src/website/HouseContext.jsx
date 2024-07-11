@@ -1,10 +1,10 @@
 import React, { useState, useEffect, createContext } from "react";
-import { housesData } from "../data";
+import axios from 'axios';
 
 export const HouseContext = createContext();
 
 const HouseContextProvider = ({ children }) => {
-  const [houses, setHouses] = useState(housesData);
+  const [houses, setHouses] = useState([]);
   const [city, setCity] = useState('Location (any)');
   const [cities, setCities] = useState([]);
   const [property, setProperty] = useState('Property type (any)');
@@ -14,14 +14,44 @@ const HouseContextProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const cities = ['Location (any)', ...new Set(housesData.map((house) => house.city))];
-    setCities(cities);
-
-    const properties = ['Property type (any)', ...new Set(housesData.map((house) => house.type))];
-    setProperties(properties);
+    fetchHouses();
+    fetchCities();
+    fetchProperties();
   }, []);
 
-  const handleClick = () => {
+  const fetchHouses = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:8080/home/get');
+      setHouses(response.data.data);
+    } catch (error) {
+      console.error('Error fetching homes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/home/cities');
+      const cities = ['Location (any)', ...response.data.data];
+      setCities(cities);
+    } catch (error) {
+      console.error('Error fetching cities:', error);
+    }
+  };
+
+  const fetchProperties = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/home/properties');
+      const properties = ['Property type (any)', ...response.data.data];
+      setProperties(properties);
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+    }
+  };
+
+  const handleClick = async () => {
     setLoading(true);
 
     const isDefault = (str) => {
@@ -31,40 +61,35 @@ const HouseContextProvider = ({ children }) => {
     const minPrice = isDefault(priceRange) ? 0 : parseInt(priceRange.split(' ')[0]);
     const maxPrice = isDefault(priceRange) ? Infinity : parseInt(priceRange.split(' ')[2]);
 
-    const filteredHouses = housesData.filter((house) => {
-      const housePrice = parseInt(house.price);
-      const matchesCity = house.city === city || isDefault(city);
-      const matchesProperty = house.type === property || isDefault(property);
-      const matchesPrice = housePrice >= minPrice && housePrice <= maxPrice;
-
-      return matchesCity && matchesProperty && matchesPrice;
-    });
-
-    
-    
-
-    setTimeout(() => {
-      return filteredHouses.length < 1 ? setHouses([]) : setHouses(filteredHouses),
+    try {
+      const response = await axios.get('http://localhost:8080/home/filter', {
+        params: {
+          city: city === 'Location (any)' ? '' : city,
+          propertyType: property === 'Property type (any)' ? '' : property,
+          minPrice,
+          maxPrice,
+        }
+      });
+      setHouses(response.data.data);
+    } catch (error) {
+      console.error('Error filtering homes:', error);
+    } finally {
       setLoading(false);
-      
-    }, 1000);
+    }
   };
 
   return (
     <HouseContext.Provider value={{
-      houses, // Include houses data in the context provider value
+      houses,
       city,
       setCity,
       cities,
-      setCities,
       property,
       setProperty,
       properties,
-      setProperties,
       priceRange,
       setPriceRange,
       loading,
-      setLoading,
       handleClick,
       isModalOpen,
       setIsModalOpen,
