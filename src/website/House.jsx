@@ -1,16 +1,16 @@
-import React from 'react'
-import { BiBed, BiBath, BiArea } from 'react-icons/bi'
+import React from 'react';
+import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 import { PiBathtubBold } from "react-icons/pi";
 import { IoBed } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
-import { Link } from 'react-router-dom';  // Add this import
+import { Link } from 'react-router-dom';
 
-const House = ({house}) => {
-  const {id, name, type, city, address, price, bedrooms, bathrooms, surface, homeId, imageData, image, imageLg} = house
+const House = ({ house }) => {
+  const { homeId, name, type, city, address, price, bedrooms, bathrooms, surface, imageData } = house;
 
   return (
-    <Link to={`/property/${homeId}`}>  {/* Add this Link wrapper */}
-      <div className='bg-slate-50 max-w-[352px] mx-auto font-dosis card card-compact border rounded-md w-64 bg-base-100 shadow-xl hover:shadow-2xl transition'>
+    <div className='bg-slate-50 max-w-[352px] mx-auto font-dosis card card-compact border rounded-md w-64 bg-base-100 shadow-xl hover:shadow-2xl transition'>
+      <Link to={`/property/${homeId}`} className='block'>
         <figure>
           {imageData && (
             <img
@@ -31,7 +31,7 @@ const House = ({house}) => {
             <h2 className="card-title font-dosis font-medium text-lg text-orange-500">
               NRs.{price}
             </h2>
-            <div className=' flex flex-col gap-y-2  text-sm'>
+            <div className='flex flex-col gap-y-2 text-sm'>
               <div className='bg-green-500 rounded-full text-white px-3'>{type}</div>
               <div className='bg-violet-500 rounded-full text-white px-3'>{city}</div>
             </div>
@@ -53,9 +53,9 @@ const House = ({house}) => {
             </div>
           </div>
         </div>
-      </div>
-    </Link>
-  )
-}
+      </Link>
+    </div>
+  );
+};
 
-export default House
+export default House;

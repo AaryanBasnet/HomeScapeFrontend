@@ -123,32 +123,3 @@ export default App;
 
 
 
-
-
-// function App() {
-//   return (
-//     <Suspense fallback={<div>Loading...</div>}>
-//       <Routes>
-//         {/* Public Routes */}
-//         <Route path="/" element={<Home />} />
-//         <Route path="/home" element={<Home />} />
-//         <Route path="/about" element={<About />} />
-//         <Route path="/properties" element={<Properties />} />
-//         <Route path="/contact" element={<Contact />} />
-//         <Route path="/register" element={<Register />} />
-//         <Route path="/signin" element={<SignInSignUpForm />} />
-//         <Route path="/property/:id" element={<PropertyDetails />} />
-
-//         {/* {isLoggedIn && (
-//           <Route path="/admin/*" element={<AdminLayout />} />
-//         )}
-
-//         {!isLoggedIn && (
-//           <Route path="*" element={<Navigate to="/signin" replace />} />
-//         )} */}
-//       </Routes>
-//     </Suspense>
-//   );
-// }
-
-// export default App;

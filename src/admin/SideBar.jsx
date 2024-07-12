@@ -25,11 +25,11 @@ const navLinks = [
     label: "Dashboard",
     icon: LayoutDashboard,
   },
-  {
-    link: "/admin/customers",
-    label: "Customers",
-    icon: User,
-  },
+  // {
+  //   link: "/admin/customers",
+  //   label: "Customers",
+  //   icon: User,
+  // },
   {
     link: "/admin/products",
     label: "Products",
@@ -40,11 +40,11 @@ const navLinks = [
     label: "Inquiry",
     icon: PackageOpen,
   },
-  {
-    link: "/admin/payment",
-    label: "Payment",
-    icon: ArrowLeftRightIcon,
-  },
+  // {
+  //   link: "/admin/payment",
+  //   label: "Payment",
+  //   icon: ArrowLeftRightIcon,
+  // },
   {
     link: "/admin/support",
     label: "Support",

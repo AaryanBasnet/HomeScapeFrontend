@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "./AuthContext";
 
+import { FaUser } from "react-icons/fa";
+
 const UserDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [username, setUsername] = useState("");
@@ -50,14 +52,9 @@ const UserDropdown = () => {
 
   return (
     <div className="relative inline-block text-left">
-      <img
-        id="avatarButton"
-        type="button"
-        onClick={toggleDropdown}
-        className="w-10 h-10 rounded-full cursor-pointer"
-        src="/docs/images/people/profile-picture-5.jpg" // Update with actual image source
-        alt="User dropdown"
-      />
+      
+      <FaUser id="avatarButton" onClick={toggleDropdown} className="w-10 h-10 rounded-full cursor-pointer" />
+
 
       {dropdownOpen && (
         <div

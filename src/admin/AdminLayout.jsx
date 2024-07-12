@@ -8,18 +8,15 @@ const Products = lazy(() => import('./products/Products'));
 const Customers = lazy(() => import('./members/Customers'));
 // const Orders = lazy(() => import('./orders/Orders'));
 const Inquiry = lazy(() => import('./orders/Inquiry'));
-
 const Contact = lazy(() => import('./support/Contact'));
-
 const AddAdmin = lazy(() => import('./addAdmin/AddAdmin'));
-
 
 const AdminLayout = () => (
   <div className="flex h-screen bg-white dark:bg-zinc-200">
     <Suspense fallback={<div>Loading Sidebar...</div>}>
       <SideBar />
     </Suspense>
-    <div className="grow">
+    <div className="flex-grow overflow-y-auto">
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="dashboard" element={<Dashboard />} />

@@ -9,19 +9,19 @@ import Footer from '../website/Footer';
 
 
 const Properties = () => {
-  const [homes, setHomes] = useState([]);
-  useEffect(() => {
-    fetchHomes();
-  }, []);
+  // const [homes, setHomes] = useState([]);
+  // useEffect(() => {
+  //   fetchHomes();
+  // }, []);
 
-  const fetchHomes = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/home');
-      setHomes(response.data);
-    } catch (error) {
-      console.error('Error fetching homes:', error);
-    }
-  };
+  // const fetchHomes = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8080/api/home');
+  //     setHomes(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching homes:', error);
+  //   }
+  // };
 
   return (
     <>

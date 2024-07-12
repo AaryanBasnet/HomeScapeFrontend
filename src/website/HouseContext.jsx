@@ -9,7 +9,7 @@ const HouseContextProvider = ({ children }) => {
   const [cities, setCities] = useState([]);
   const [property, setProperty] = useState('Property type (any)');
   const [properties, setProperties] = useState([]);
-  const [priceRange, setPriceRange] = useState('price range (any)');
+  const [priceRange, setPriceRange] = useState('Price range (any)');
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -53,22 +53,41 @@ const HouseContextProvider = ({ children }) => {
 
   const handleClick = async () => {
     setLoading(true);
-
-    const isDefault = (str) => {
-      return str.toLowerCase().includes('any');
-    };
-
-    const minPrice = isDefault(priceRange) ? 0 : parseInt(priceRange.split(' ')[0]);
-    const maxPrice = isDefault(priceRange) ? Infinity : parseInt(priceRange.split(' ')[2]);
-
+  
     try {
-      const response = await axios.get('http://localhost:8080/home/filter', {
-        params: {
-          city: city === 'Location (any)' ? '' : city,
-          propertyType: property === 'Property type (any)' ? '' : property,
-          minPrice,
-          maxPrice,
+      const params = {};
+  
+      if (city !== 'Location (any)') {
+        params.city = city;
+      }
+  
+      if (property !== 'Property type (any)') {
+        params.propertyType = property;
+      }
+  
+      // Split and parse priceRange
+      if (!isDefault(priceRange)) {
+        const [minStr, maxStr] = priceRange.split('-').map(str => str.trim());
+  
+        if (minStr) {
+          const min = parseInt(minStr.replace(/\D/g, ''));
+          if (!isNaN(min)) {
+            params.minPrice = min;
+          }
         }
+  
+        if (maxStr) {
+          const max = parseInt(maxStr.replace(/\D/g, ''));
+          if (!isNaN(max)) {
+            params.maxPrice = max;
+          }
+        }
+      }
+  
+      console.log('Filtering with params:', params);
+  
+      const response = await axios.get('http://localhost:8080/home/filter', {
+        params: params
       });
       setHouses(response.data.data);
     } catch (error) {
@@ -77,23 +96,28 @@ const HouseContextProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  const isDefault = (str) => {
+    return str.toLowerCase().includes('any');
+  };
 
   return (
-    <HouseContext.Provider value={{
-      houses,
-      city,
-      setCity,
-      cities,
-      property,
-      setProperty,
-      properties,
-      priceRange,
-      setPriceRange,
-      loading,
-      handleClick,
-      isModalOpen,
-      setIsModalOpen,
-    }}>
+    <HouseContext.Provider
+      value={{
+        houses,
+        city,
+        setCity,
+        cities,
+        property,
+        setProperty,
+        properties,
+        priceRange,
+        setPriceRange,
+        loading,
+        isModalOpen,
+        setIsModalOpen,
+        handleClick,
+      }}
+    >
       {children}
     </HouseContext.Provider>
   );

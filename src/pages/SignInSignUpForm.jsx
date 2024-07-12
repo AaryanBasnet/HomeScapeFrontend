@@ -43,15 +43,21 @@ const SignInSignUpForm = () => {
         password,
       });
   
-      const { token, id, roles } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", id);
+      console.log("Login response:", response.data); // Check response data
+  
+      const { accessToken, userId, roles } = response.data;
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("userId", userId);
       localStorage.setItem("roles", JSON.stringify(roles));
+  
+      console.log("Token set in localStorage:", localStorage.getItem("token")); // Debug localStorage
+      console.log("UserId set in localStorage:", localStorage.getItem("userId"));
   
       const role = roles.includes("ADMIN") ? "/admin/dashboard" : "/home";
       navigate(role);
       window.location.reload();
     } catch (error) {
+      console.error("Login error:", error);
       alert("Invalid credentials. Please try again.");
     }
   };
@@ -110,14 +116,14 @@ const SignInSignUpForm = () => {
               />
             </div>
             <div className="mb-4">
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <label className="block text-gray-700">Password</label>
                 {!isSignUp && (
                   <a href="#" className="text-sm text-blue-500 hover:underline">
                     Forgot Password?
                   </a>
                 )}
-              </div>
+              </div> */}
               <input
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="password"
