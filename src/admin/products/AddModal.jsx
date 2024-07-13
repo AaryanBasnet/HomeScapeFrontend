@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   const [homeData, setHomeData] = useState({
@@ -90,6 +91,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
           }
         );
         console.log("Home updated successfully");
+        toast.success("Home updated successfully");
       } else {
         response = await axios.post(
           "http://localhost:8080/home/save",
@@ -101,6 +103,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
           }
         );
         console.log("Home added successfully");
+        toast.success("Home added successfully");
       }
       console.log("Response:", response.data);
 
@@ -109,10 +112,13 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
     } catch (error) {
       if (error.response) {
         console.error("Server responded with error:", error.response.data);
+        toast.error("Failed to save home");
       } else if (error.request) {
         console.error("No response received:", error.request);
+        toast.error("Failed to save home");
       } else {
         console.error("Error:", error.message);
+        toast.error("Failed to save home");
       }
     }
   };

@@ -25,11 +25,7 @@ const navLinks = [
     label: "Dashboard",
     icon: LayoutDashboard,
   },
-  // {
-  //   link: "/admin/customers",
-  //   label: "Customers",
-  //   icon: User,
-  // },
+
   {
     link: "/admin/products",
     label: "Products",
@@ -40,11 +36,7 @@ const navLinks = [
     label: "Inquiry",
     icon: PackageOpen,
   },
-  // {
-  //   link: "/admin/payment",
-  //   label: "Payment",
-  //   icon: ArrowLeftRightIcon,
-  // },
+
   {
     link: "/admin/support",
     label: "Support",
@@ -62,7 +54,7 @@ function SideBar() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Adjust this based on your authentication logic
+  const [isLoggedIn, setIsLoggedIn] = useState(true); 
 
   useEffect(() => {
     const handleResize = () => {
@@ -81,7 +73,7 @@ function SideBar() {
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
     setIsLoggedIn(false);
-    navigate("/");
+    navigate("/signin");
     console.log("User logged out");
   };
 

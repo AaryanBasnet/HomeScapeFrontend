@@ -1,31 +1,14 @@
 import React from 'react';
 import HouseList from '../website/HouseList';
-import HomeList from '../website/HomeList';
 import Search from '../website/Search';
-import Navbar from '../website/NavBar'
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import Footer from '../website/Footer';
 
 
 const Properties = () => {
-  // const [homes, setHomes] = useState([]);
-  // useEffect(() => {
-  //   fetchHomes();
-  // }, []);
 
-  // const fetchHomes = async () => {
-  //   try {
-  //     const response = await axios.get('http://localhost:8080/api/home');
-  //     setHomes(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching homes:', error);
-  //   }
-  // };
 
   return (
     <>
-    <Navbar />
+    
     <section className="py-8">
         
       <div className="container mx-auto">
@@ -44,9 +27,7 @@ const Properties = () => {
         
       </div>
     </section>
-    <div className=''>
-        <Footer />
-      </div>
+    
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddAdmin = () => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,8 @@ const AddAdmin = () => {
   const SignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match. Please try again.');
+     
+      toast.error('Passwords do not match. Please try again.');
       return;
     }
 
@@ -23,13 +25,15 @@ const AddAdmin = () => {
       });
 
       if (response.status === 200) {
-        alert('Registration successful!');
+       
+        toast.success('Registration successful!');
       } else {
-        alert('Registration failed. Please try again.');
+      
+        toast.error('Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Registration failed. Please try again.');
+      toast.error('Registration failed. Please try again.');
     }
   };
 

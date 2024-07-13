@@ -29,16 +29,7 @@ function Products() {
     }
   };
 
-  const handleAdd = async (newHome) => {
-    try {
-      const response = await axios.post('http://localhost:8080/home/save', newHome);
-      setHomes((prevHomes) => [...prevHomes, response.data]);
-      setIsAdding(false); // Close AddModal after adding a new home
-    } catch (error) {
-      console.error('Error adding home:', error);
-      // Handle error adding home
-    }
-  };
+  
 
   const handleEdit = (home) => {
     setSelectedHome(home);
@@ -49,15 +40,15 @@ function Products() {
     try {
       await axios.delete(`http://localhost:8080/home/delete/${id}`);
       setHomes((prevHomes) => prevHomes.filter((home) => home.id !== id));
-      // No need to call fetchHomes() again since setHomes already updates the list
+     
     } catch (error) {
       console.error('Error deleting home:', error);
-      // Handle error deleting home
+      
     }
   };
 
   const openAddModal = () => {
-    setSelectedHome(null); // Ensure selectedHome is reset when opening the modal for adding
+    setSelectedHome(null); 
     setIsAdding(true);
   };
 

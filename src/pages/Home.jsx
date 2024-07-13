@@ -6,7 +6,8 @@ import Footer from '../website/Footer';
 
 const Home = () => {
   return (
-    <div className="min-h-[1800px]">
+    <>
+    <div className="">
       <LandingPage />
       <div className="container mx-auto py-8">
         <HouseList limit={8} />
@@ -16,10 +17,10 @@ const Home = () => {
           </Link>
         </div>
       </div>
-      <div className=''>
-        <Footer />
-      </div>
+      
     </div>
+    <Footer />
+    </>
   );
 };
 

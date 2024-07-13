@@ -31,7 +31,7 @@ const HomeList = () => {
     axios.delete(`http://localhost:8080/home/delete/${homeId}`)
       .then(response => {
         if (response.status === 200) {
-          fetchHomes(); // Refresh the list after deletion
+          fetchHomes(); 
         }
         console.log('Home deleted successfully:', response);
       })
@@ -43,7 +43,7 @@ const HomeList = () => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedHome(null);
-    fetchHomes(); // Refresh the list after saving or updating
+    fetchHomes();
   };
 
   return (

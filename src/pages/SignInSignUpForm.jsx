@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import loginImage from "../assets/img/houses/house1lg.png";
 import Logo from "../assets/img/houses/house2lg.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignInSignUpForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -16,80 +18,118 @@ const SignInSignUpForm = () => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.post("http://localhost:8080/api/auth/refresh", null, {
-            headers: {
-              "Authorization": `Bearer ${token}`
+          const response = await axios.post(
+            "http://localhost:8080/api/auth/refresh",
+            null,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
           const newAccessToken = response.data;
           localStorage.setItem("token", newAccessToken);
         } catch (error) {
           console.error("Failed to refresh token:", error);
-          alert("Failed to refresh token. Please log in again.");
+          toast.error("Failed to refresh token. Please log in again.");
           // localStorage.removeItem("token");
           // navigate("/login");
         }
       }
     };
-  
     checkTokenAndRefresh();
   }, []);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        username,
-        password,
-      });
-  
-      console.log("Login response:", response.data); // Check response data
-  
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          username,
+          password,
+        }
+      );
+
+      console.log("Login response:", response.data);
+
       const { accessToken, userId, roles } = response.data;
       localStorage.setItem("token", accessToken);
       localStorage.setItem("userId", userId);
       localStorage.setItem("roles", JSON.stringify(roles));
-  
-      console.log("Token set in localStorage:", localStorage.getItem("token")); // Debug localStorage
+
+      console.log("Token set in localStorage:", localStorage.getItem("token"));
       console.log("UserId set in localStorage:", localStorage.getItem("userId"));
-  
+
       const role = roles.includes("ADMIN") ? "/admin/dashboard" : "/home";
+      toast.success("Login successful!");
       navigate(role);
-      window.location.reload();
     } catch (error) {
       console.error("Login error:", error);
-      alert("Invalid credentials. Please try again.");
+      toast.error("Invalid credentials. Please try again.");
     }
   };
-  
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match. Please try again.");
+      toast.error("Passwords do not match. Please try again.");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/register/user", {
-        username: username,
-        password: password,
-        confirm_password: confirmPassword,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/register/user",
+        {
+          username: username,
+          password: password,
+          confirm_password: confirmPassword,
+        }
+      );
 
       if (response.status === 200) {
-        alert("Registration successful!");
+        toast.success("Registration successful!");
         setIsSignUp(false);
       } else {
-        alert("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Registration failed. Please try again.");
+      toast.error("Registration failed. Please try again.");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-white p-4">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <div className="absolute top-4 left-4">
+        <Link to="/home">
+          <button
+            type="button"
+            className="bg-gray-100 text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
+          >
+            <div className="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
+              <svg
+                width="25px"
+                height="25px"
+                viewBox="0 0 1024 1024"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="#000000"
+                  d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
+                ></path>
+                <path
+                  fill="#000000"
+                  d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
+                ></path>
+              </svg>
+            </div>
+            <p className="translate-x-2">Go Back</p>
+          </button>
+        </Link>
+      </div>
+      
       <div className="bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full">
         <div
           className="md:w-1/2 bg-cover bg-center rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
@@ -102,53 +142,47 @@ const SignInSignUpForm = () => {
             <img src={Logo} alt="Logo" className="w-24 mx-auto" />
           </div>
           <p className="text-2xl font-bold mb-6 text-center">
-            {isSignUp ? 'Create your account' : 'Welcome back!'}
+            {isSignUp ? "Create your account" : "Welcome back!"}
           </p>
           <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
-            <div className="mb-4">
-              <label className="block text-gray-700">Username</label>
-              <input
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              {/* <div className="flex justify-between items-center">
-                <label className="block text-gray-700">Password</label>
-                {!isSignUp && (
-                  <a href="#" className="text-sm text-blue-500 hover:underline">
-                    Forgot Password?
-                  </a>
-                )}
-              </div> */}
-              <input
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {isSignUp && (
-              <div className="mb-4">
-                <label className="block text-gray-700">Confirm Password</label>
+          <div className="mb-4">
+                <label className="block text-gray-700">Username</label>
                 <input
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
-            )}
-            <div className="mb-6">
-              <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                {isSignUp ? 'Sign Up' : 'Login'}
-              </button>
-            </div>
+              <div className="mb-4">
+                <input
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              {isSignUp && (
+                <div className="mb-4">
+                  <label className="block text-gray-700">
+                    Confirm Password
+                  </label>
+                  <input
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              )}
+              <div className="mb-6">
+                <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+                  {isSignUp ? "Sign Up" : "Login"}
+                </button>
+              </div>
           </form>
           <div className="flex items-center justify-between">
             <span className="block border-t w-full"></span>
@@ -158,7 +192,7 @@ const SignInSignUpForm = () => {
           <div className="mt-6 text-center">
             {isSignUp ? (
               <p className="text-sm">
-                Already have an account?{' '}
+                Already have an account?{" "}
                 <span
                   className="text-blue-500 cursor-pointer hover:underline"
                   onClick={() => setIsSignUp(false)}
@@ -168,7 +202,7 @@ const SignInSignUpForm = () => {
               </p>
             ) : (
               <p className="text-sm">
-                New to HomeScape?{' '}
+                New to HomeScape?{" "}
                 <span
                   className="text-blue-500 cursor-pointer hover:underline"
                   onClick={() => setIsSignUp(true)}

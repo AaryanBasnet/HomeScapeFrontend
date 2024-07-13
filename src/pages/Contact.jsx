@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from '../website/NavBar';
-import Footer from '../website/Footer';
+
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -14,7 +14,7 @@ const Contact = () => {
     const userId = localStorage.getItem('userId');
 
     if (!token) {
-      alert('Please log in to send a message');
+      toast.error('Please log in to send a message');
       return;
     }
 
@@ -34,20 +34,20 @@ const Contact = () => {
         }
       );
       if (response.status === 200) {
-        alert('Message sent successfully');
+        toast.success('Message sent successfully');
         setName('');
         setEmail('');
         setMessage('');
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert('Failed to send message');
+      toast.error('Failed to send message');
     }
   };
 
   return (
     <>
-      <Navbar />
+      
       <section className="text-gray-600 body-font relative">
         <div className="container px-5 py-5 mx-auto">
           <div className="flex flex-col text-center w-full mb-12">
@@ -109,7 +109,7 @@ const Contact = () => {
           </form>
         </div>
       </section>
-      <Footer />
+      
     </>
   );
 };

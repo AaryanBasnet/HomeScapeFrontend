@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "./AuthContext";
-
 import { FaUser } from "react-icons/fa";
 
 const UserDropdown = () => {
@@ -17,7 +16,7 @@ const UserDropdown = () => {
     const fetchUserData = async () => {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
-     
+
       if (userId && token) {
         try {
           const response = await axios.get(`http://localhost:8080/customer/get/${userId}`, {
@@ -29,14 +28,20 @@ const UserDropdown = () => {
           setUsername(userData.username);
           setEmail(userData.email);
           setRoles(userData.roles.map(role => role.name));
+
+          // Navigate to signup if the user is an admin
+          if (userData.roles.some(role => role.name === "ADMIN")) {
+            handleSignOut();
+            navigate("/signup");
+          }
         } catch (error) {
           console.error("Failed to fetch user data:", error);
         }
       }
     };
- 
+
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -52,10 +57,11 @@ const UserDropdown = () => {
 
   return (
     <div className="relative inline-block text-left">
-      
-      <FaUser id="avatarButton" onClick={toggleDropdown} className="w-10 h-10 rounded-full cursor-pointer" />
-
-
+      <FaUser
+        id="avatarButton"
+        onClick={toggleDropdown}
+        className="w-10 h-10 rounded-full cursor-pointer"
+      />
       {dropdownOpen && (
         <div
           id="userDropdown"

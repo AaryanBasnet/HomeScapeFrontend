@@ -6,24 +6,23 @@ import { FaRegHeart } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 function Card({ home, onEdit, onDelete }) {
-  
-
   return (
     <div className="m-4 flex justify-center items-center">
       <div className="card card-compact border rounded-md w-64 bg-base-100 shadow-xl">
         <figure>
-        {home.imageData && (
-                <img
-                  src={`http://localhost:8080/home/image/${home.homeId}`}
-                  alt={home.name}
-                  className="w-full h-48 object-cover mb-4 rounded-md"
-                  onError={(e) => {
-                    console.error(`Error loading image for home ${home.homeId}`);
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
-                  }}
-                />
-              )}
+          {home.imageData && (
+            <img
+              src={`http://localhost:8080/home/image/${home.homeId}`}
+              alt={home.name}
+              className="w-full h-48 object-cover mb-4 rounded-md"
+              onError={(e) => {
+                console.error(`Error loading image for home ${home.homeId}`);
+                e.target.onerror = null;
+                e.target.src =
+                  "https://via.placeholder.com/400x300?text=Image+Not+Found";
+              }}
+            />
+          )}
         </figure>
         <div className="card-body p-4">
           <div className="flex justify-between items-center">
@@ -51,7 +50,9 @@ function Card({ home, onEdit, onDelete }) {
             </div>
             <div className="flex items-center">
               <BiArea className="text-black" />
-              <span className="text-sm font-dosis ml-1">{home.surface} sq ft</span>
+              <span className="text-sm font-dosis ml-1">
+                {home.surface} sq ft
+              </span>
             </div>
           </div>
           <div className="mt-4">

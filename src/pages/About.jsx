@@ -1,6 +1,5 @@
 import React from 'react';
-import Navbar from '../website/NavBar'
-import Footer from '../website/Footer';
+
 
 
 import house1 from '../assets/img/houses/house1lg.png';
@@ -13,7 +12,7 @@ import house6 from '../assets/img/houses/house6lg.png';
 const About = () => {
   return (
     <>
-    <Navbar />
+    
 
     <div className="container mx-auto px-4 py-8">
 
@@ -49,9 +48,7 @@ const About = () => {
         </div>
       </div>
     </div>
-    <div className=''>
-        <Footer />
-      </div>
+    
     </>
   );
 };

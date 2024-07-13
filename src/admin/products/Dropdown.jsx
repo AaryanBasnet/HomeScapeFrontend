@@ -24,7 +24,7 @@ export default function Dropdown({ onSelect, selectedOption }) {
   const handleSelectChange = (event) => {
     const selectedAgentId = parseInt(event.target.value);
     const selectedAgentObj = agents.find(agent => agent.agentId === selectedAgentId);
-    onSelect(selectedAgentObj); // Pass selected agent object to parent component
+    onSelect(selectedAgentObj);
   };
 
   return (

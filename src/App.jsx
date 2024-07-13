@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect, Navigate } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -11,6 +11,8 @@ const SignInSignUpForm = lazy(() => import('./pages/SignInSignUpForm'));
 const UnAuthorized = lazy(() => import("./pages/UnAuthorized"));
 
 import AdminLayout from './admin/AdminLayout';
+import SharedLayout from './pages/SharedLayout';
+import Loader from './website/Loader';  // Adjust the path as necessary
 
 const queryClient = new QueryClient();
 
@@ -25,14 +27,17 @@ const App = () => {
     }
     setLoading(false);
   }, []);
-  if (isLoading) return <div>Loading...</div>;
+
+  if (isLoading) return <Loader />;
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Home />
+        <Suspense fallback={<Loader />}>
+          
+            <Home />
+          
         </Suspense>
       ),
       errorElement: <>Error loading home component</>,
@@ -40,8 +45,10 @@ const App = () => {
     {
       path: "/home",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Home />
+        <Suspense fallback={<Loader />}>
+         
+            <Home />
+          
         </Suspense>
       ),
       errorElement: <>Error loading home component</>,
@@ -49,8 +56,10 @@ const App = () => {
     {
       path: "/about",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <About />
+        <Suspense fallback={<Loader />}>
+          <SharedLayout>
+            <About />
+          </SharedLayout>
         </Suspense>
       ),
       errorElement: <>Error loading about component</>,
@@ -58,8 +67,10 @@ const App = () => {
     {
       path: "/properties",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Properties />
+        <Suspense fallback={<Loader />}>
+          <SharedLayout>
+            <Properties />
+          </SharedLayout>
         </Suspense>
       ),
       errorElement: <>Error loading properties component</>,
@@ -67,18 +78,21 @@ const App = () => {
     {
       path: "/contact",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Contact />
+        <Suspense fallback={<Loader />}>
+          <SharedLayout>
+            <Contact />
+          </SharedLayout>
         </Suspense>
       ),
       errorElement: <>Error loading contact component</>,
     },
-    
     {
       path: "/property/:id",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PropertyDetails />
+        <Suspense fallback={<Loader />}>
+          <SharedLayout>
+            <PropertyDetails />
+          </SharedLayout>
         </Suspense>
       ),
       errorElement: <>Error loading property details component</>,
@@ -86,8 +100,10 @@ const App = () => {
     {
       path: "/signin",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
-          <SignInSignUpForm />
+        <Suspense fallback={<Loader />}>
+          
+            <SignInSignUpForm />
+          
         </Suspense>
       ),
       errorElement: <>Error loading login component</>,
@@ -103,7 +119,7 @@ const App = () => {
     {
       path: "*",
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <UnAuthorized />
         </Suspense>
       ),
@@ -119,7 +135,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-

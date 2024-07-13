@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { BiBed, BiBath, BiArea } from "react-icons/bi";
-import Navbar from "../website/NavBar";
 import ContactAgent from "../website/ContactAgent";
 import axios from 'axios';
+import Loader from "../website/Loader";
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -31,7 +31,9 @@ const PropertyDetails = () => {
     return (
       <section>
         <div className="container mx-auto min-h-[800px] flex justify-center items-center">
-          <p>Loading...</p>
+          <p>
+            <Loader />
+          </p>
         </div>
       </section>
     );
@@ -41,7 +43,9 @@ const PropertyDetails = () => {
     return (
       <section>
         <div className="container mx-auto min-h-[800px] flex justify-center items-center">
-          <p>House not found</p>
+          <p>
+            
+          </p>
         </div>
       </section>
     );
@@ -49,9 +53,7 @@ const PropertyDetails = () => {
 
   return (
     <section className="">
-      <div>
-        <Navbar />
-      </div>
+      
 
       <div className="container mx-auto flex flex-col lg:flex-row gap-8">
         <div className="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-lg">

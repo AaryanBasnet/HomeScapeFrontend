@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import UserDropdown from "./UserDropdown"; 
 import { useAuth } from "./AuthContext";
+import Loader from "./Loader";
 
 
 const Navbar = () => {
@@ -15,7 +16,7 @@ const Navbar = () => {
   };
 
   if (isLoading) {
-    return null; // or a loading spinner
+    return <Loader />; // or a loading spinner
   }
   return (
     <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-50">
@@ -37,20 +38,21 @@ const Navbar = () => {
         ))}
       </div>
       <motion.div
-        whileHover={{
-          scale: 1.1,
-          textShadow: "0px 0px 8px rgb(255, 255, 255)",
-        }}
-        className="hidden md:block"
-      >
-        {isLoggedIn ? (
-          <UserDropdown />
-        ) : (
-          <Link to="/signin" className="text-white bg-violet-600 py-2 px-4 rounded-3xl hover:bg-violet-700">
-            Get Started
-          </Link>
-        )}
-      </motion.div>
+      whileHover={{
+        scale: 1.1,
+        boxShadow: "0 0px 20px rgba(193, 163, 98, 0.4)",
+      }}
+      className="relative px-6 py-2 text-[18px] text-black border-2 border-[#150ccc] rounded-[34px] bg-transparent font-semibold transition-all duration-300 ease-[cubic-bezier(0.23, 1, 0.32, 1)] overflow-hidden group"
+    >
+      {isLoggedIn ? (
+        <UserDropdown />
+      ) : (
+        <Link to="/signin" className="relative">
+          Get Started
+          <span className="absolute inset-0 m-auto w-[50px] h-[50px] rounded-inherit scale-0 z-[-1] bg-[#2395bb] transition-all duration-600 ease-[cubic-bezier(0.23, 1, 0.32, 1)] group-hover:scale-[3]"></span>
+        </Link>
+      )}
+    </motion.div>
       <button
         className="md:hidden text-black focus:outline-none"
         onClick={() => setIsOpen(!isOpen)}
