@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import axios from 'axios';
-import { toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -10,10 +10,10 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
     const userId = localStorage.getItem('userId');
 
-    if (!token) {
+    if (!refreshToken) {
       toast.error('Please log in to send a message');
       return;
     }
@@ -29,7 +29,7 @@ const Contact = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${refreshToken}`,
           },
         }
       );
@@ -47,6 +47,7 @@ const Contact = () => {
 
   return (
     <>
+    <ToastContainer />
       
       <section className="text-gray-600 body-font relative">
         <div className="container px-5 py-5 mx-auto">

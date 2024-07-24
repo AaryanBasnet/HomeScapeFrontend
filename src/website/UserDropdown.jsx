@@ -15,7 +15,7 @@ const UserDropdown = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("refreshToken");
 
       if (userId && token) {
         try {
@@ -36,6 +36,7 @@ const UserDropdown = () => {
           }
         } catch (error) {
           console.error("Failed to fetch user data:", error);
+          handleSignOut();
         }
       }
     };
@@ -51,6 +52,7 @@ const UserDropdown = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
+    localStorage.removeItem("refreshToken");
     setIsLoggedIn(false);
     navigate("/");
   };
@@ -65,7 +67,7 @@ const UserDropdown = () => {
       {dropdownOpen && (
         <div
           id="userDropdown"
-          className="absolute right-0 z-10 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+          className="absolute right-0 z-50 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div>{username}</div>

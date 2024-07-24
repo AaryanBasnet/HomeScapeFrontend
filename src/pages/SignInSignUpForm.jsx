@@ -5,6 +5,7 @@ import loginImage from "../assets/img/houses/house1lg.png";
 import Logo from "../assets/img/houses/house2lg.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../website/AuthContext"; // Import the custom hook
 
 const SignInSignUpForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -12,33 +13,38 @@ const SignInSignUpForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn } = useAuth(); // Use auth context
 
   useEffect(() => {
-    const checkTokenAndRefresh = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
+    const checkTokenAndRedirect = async () => {
+      const refreshToken = localStorage.getItem("refreshToken");
+      const userId = localStorage.getItem("userId");
+
+      if (refreshToken && userId) {
         try {
           const response = await axios.post(
             "http://localhost:8080/api/auth/refresh",
             null,
             {
               headers: {
-                Authorization: `Bearer ${token}`,
+                "Refresh-Token": refreshToken,
               },
             }
           );
-          const newAccessToken = response.data;
-          localStorage.setItem("token", newAccessToken);
+          const { accessToken } = response.data;
+          localStorage.setItem("token", accessToken);
         } catch (error) {
           console.error("Failed to refresh token:", error);
-          toast.error("Failed to refresh token. Please log in again.");
-          // localStorage.removeItem("token");
-          // navigate("/login");
+          localStorage.clear();
+          navigate("/signin");
         }
+      } else if (isLoggedIn) {
+        navigate("/home"); 
       }
     };
-    checkTokenAndRefresh();
-  }, []);
+
+    checkTokenAndRedirect();
+  }, [navigate, isLoggedIn]);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -53,10 +59,13 @@ const SignInSignUpForm = () => {
 
       console.log("Login response:", response.data);
 
-      const { accessToken, userId, roles } = response.data;
+      const { accessToken, refreshToken, userId, roles } = response.data;
       localStorage.setItem("token", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userId", userId);
       localStorage.setItem("roles", JSON.stringify(roles));
+
+      setIsLoggedIn(true);
 
       console.log("Token set in localStorage:", localStorage.getItem("token"));
       console.log("UserId set in localStorage:", localStorage.getItem("userId"));
@@ -64,6 +73,7 @@ const SignInSignUpForm = () => {
       const role = roles.includes("ADMIN") ? "/admin/dashboard" : "/home";
       toast.success("Login successful!");
       navigate(role);
+      window.location.reload();
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid credentials. Please try again.");
@@ -88,17 +98,19 @@ const SignInSignUpForm = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Registration successful!");
+        toast.success("Registration successful. Please log in.");
         setIsSignUp(false);
       } else {
         toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      toast.error("Registration failed. Please try again.");
+      toast.error("Username already exists. Please choose another.");
     }
   };
 
+  
+  
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-white p-4">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
@@ -145,44 +157,43 @@ const SignInSignUpForm = () => {
             {isSignUp ? "Create your account" : "Welcome back!"}
           </p>
           <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
-          <div className="mb-4">
-                <label className="block text-gray-700">Username</label>
-                <input
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Username</label>
+              <input
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Password</label>
+              <input
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {isSignUp && (
               <div className="mb-4">
+                <label className="block text-gray-700">Confirm Password</label>
                 <input
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
               </div>
-              {isSignUp && (
-                <div className="mb-4">
-                  <label className="block text-gray-700">
-                    Confirm Password
-                  </label>
-                  <input
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              )}
-              <div className="mb-6">
-                <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                  {isSignUp ? "Sign Up" : "Login"}
-                </button>
-              </div>
+            )}
+            <div className="mb-6">
+              <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+                {isSignUp ? "Sign Up" : "Login"}
+              </button>
+            </div>
           </form>
           <div className="flex items-center justify-between">
             <span className="block border-t w-full"></span>

@@ -72,8 +72,10 @@ function SideBar() {
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
+    localStorage.removeItem("refreshToken");
     setIsLoggedIn(false);
-    navigate("/signin");
+    navigate("/");
+    window.location.reload();
     console.log("User logged out");
   };
 

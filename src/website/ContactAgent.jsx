@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ContactAgent = ({ homeId }) => {
   const [formData, setFormData] = useState({
@@ -39,7 +41,7 @@ const ContactAgent = ({ homeId }) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('Please log in to contact the agent.');
+        toast.error('Please log in to contact the agent.');
         return;
       }
 
@@ -54,7 +56,7 @@ const ContactAgent = ({ homeId }) => {
       );
 
       if (response.status === 201) {
-        alert('Inquiry sent successfully');
+        toast.success('Inquiry sent successfully');
         setFormData({
           name: '',
           email: '',
@@ -71,6 +73,8 @@ const ContactAgent = ({ homeId }) => {
   };
 
   return (
+    <>
+    <ToastContainer />
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
       <input
         type="text"
@@ -112,6 +116,7 @@ const ContactAgent = ({ homeId }) => {
         Contact Agent
       </button>
     </form>
+    </>
   );
 };
 

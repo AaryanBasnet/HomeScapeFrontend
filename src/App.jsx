@@ -21,8 +21,8 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
       setIsLoggedIn(true);
     }
     setLoading(false);

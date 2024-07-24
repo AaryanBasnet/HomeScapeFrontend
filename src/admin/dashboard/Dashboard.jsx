@@ -1,226 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import CardDataStats from './CardDataStats';
+import Linegraph from './Linegraph';
 const Dashboard = () => {
-  const [homeData, setHomeData] = useState({
-    name: '',
-    address: '',
-    price: '',
-    bathrooms: '',
-    bedrooms: '',
-    surface: '',
-    city: '',
-    description: '',
-    type: '',
-    agentId: ''
+  const [data, setData] = useState({
+    totalHomes: '0',
+    totalInquiries: '0',
+    totalCustomers: '0',
+    totalContacts: '0',
   });
-  const [image, setImage] = useState(null);
-  const [message, setMessage] = useState('');
-  const [homes, setHomes] = useState([]);
 
   useEffect(() => {
-    fetchHomes();
+    const fetchData = async () => {
+      try {
+        const [homesRes, inquiriesRes, customersRes, contactsRes] = await Promise.all([
+          axios.get('http://localhost:8080/home/count'),
+          axios.get('http://localhost:8080/api/inquiry/count'),
+          axios.get('http://localhost:8080/customer/count'),
+          axios.get('http://localhost:8080/api/contact/count'),
+        ]);
+
+        // Log responses for debugging
+        console.log('Homes Response:', homesRes.data);
+        console.log('Inquiries Response:', inquiriesRes.data);
+        console.log('Customers Response:', customersRes.data);
+        console.log('Contacts Response:', contactsRes.data);
+
+        setData({
+          totalHomes: homesRes.data.data || '0',
+          totalInquiries: inquiriesRes.data.data || '0',
+          totalCustomers: customersRes.data.data || '0',
+          totalContacts: contactsRes.data.data || '0',
+        });
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const fetchHomes = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/home/get');
-      setHomes(response.data.data);
-    } catch (error) {
-      console.error('Failed to fetch homes:', error);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setHomeData({ ...homeData, [name]: value });
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('home', new Blob([JSON.stringify(homeData)], { type: 'application/json' }));
-    formData.append('image', image);
-
-    try {
-      await axios.post('http://localhost:8080/home/save', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      setMessage('Home created successfully!');
-      fetchHomes();
-    } catch (error) {
-      setMessage('Failed to create home. Please try again.');
-    }
-  };
+  console.log('Dashboard Data:', data); // Add this line to check the state
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5 border border-gray-300 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-5">Add New Home</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={homeData.name}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Address</label>
-            <input
-              type="text"
-              name="address"
-              value={homeData.address}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Price</label>
-            <input
-              type="number"
-              name="price"
-              value={homeData.price}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Bathrooms</label>
-            <input
-              type="number"
-              name="bathrooms"
-              value={homeData.bathrooms}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Bedrooms</label>
-            <input
-              type="number"
-              name="bedrooms"
-              value={homeData.bedrooms}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Surface</label>
-            <input
-              type="number"
-              name="surface"
-              value={homeData.surface}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">City</label>
-            <input
-              type="text"
-              name="city"
-              value={homeData.city}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Type</label>
-            <input
-              type="text"
-              name="type"
-              value={homeData.type}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Agent ID</label>
-            <input
-              type="text"
-              name="agentId"
-              value={homeData.agentId}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4 col-span-2">
-            <label className="block text-gray-700 mb-2">Description</label>
-            <textarea
-              name="description"
-              value={homeData.description}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4 col-span-2">
-            <label className="block text-gray-700 mb-2">Image</label>
-            <input
-              type="file"
-              onChange={handleImageChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
-          Add Home
-        </button>
-      </form>
-      {message && <p className="mt-4 text-red-500">{message}</p>}
+    <>
+        <h1 className='mx-4 text-2xl font-bold '>Dashboard</h1>
 
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-5">All Homes</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {homes.map((home) => (
-            <div key={home.homeId} className="border border-gray-300 p-4 rounded-lg">
-              <h3 className="text-xl font-bold mb-2">{home.name}</h3>
-              <p className="mb-2">{home.address}</p>
-              <p className="mb-2">Price: ${home.price}</p>
-              <p className="mb-2">Bedrooms: {home.bedrooms}</p>
-              <p className="mb-2">Bathrooms: {home.bathrooms}</p>
-              <p className="mb-2">Surface: {home.surface} sq ft</p>
-              <p className="mb-2">City: {home.city}</p>
-              <p className="mb-4">{home.description}</p>
-              {home.imageData && (
-                <img
-                  src={`http://localhost:8080/home/image/${home.homeId}`}
-                  alt={home.name}
-                  className="w-full h-48 object-cover mb-4 rounded-md"
-                  onError={(e) => {
-                    console.error(`Error loading image for home ${home.homeId}`);
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
-                  }}
-                />
-              )}
-              <p className="text-sm text-gray-500">Agent ID: {home.agent ? home.agent.id : 'N/A'}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className='m-4'>
+
+   
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <CardDataStats
+        title="Total Homes"
+        total={data.totalHomes}
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+<path fill="#E8EAF6" d="M42 39L6 39 6 23 24 6 42 23z"></path><path fill="#C5CAE9" d="M39 21L34 16 34 9 39 9zM6 39H42V44H6z"></path><path fill="#B71C1C" d="M24 4.3L4 22.9 6 25.1 24 8.4 42 25.1 44 22.9z"></path><path fill="#D84315" d="M18 28H30V44H18z"></path><path fill="#01579B" d="M21 17H27V23H21z"></path><path fill="#FF8A65" d="M27.5,35.5c-0.3,0-0.5,0.2-0.5,0.5v2c0,0.3,0.2,0.5,0.5,0.5S28,38.3,28,38v-2C28,35.7,27.8,35.5,27.5,35.5z"></path>
+</svg>
+      </CardDataStats>
+
+      <CardDataStats
+        title="Total Inquiries"
+        total={data.totalInquiries}
+      >
+       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="customer-support"><circle cx="24" cy="10" r="7.5" fill="#90cff1" transform="rotate(-45.001 24.002 9.989)"></circle><path fill="#70b7e6" d="M20.7 15.3c-2.9-2.9-2.9-7.7 0-10.6 1.2-1.2 2.7-1.9 4.3-2.1-2.2-.3-4.6.4-6.3 2.1-2.9 2.9-2.9 7.7 0 10.6 1.7 1.7 4.1 2.4 6.3 2.1-1.6-.2-3.1-.9-4.3-2.1z"></path><path fill="#004463" d="M15.1 16.6h-2.8c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h2.8c1.1 0 2-.9 2-2v-1.1c0-.3.2-.5.5-.5s.5.2.5.5v1.1c0 1.6-1.3 3-3 3z"></path><path fill="#607d95" d="M6.4 13.5H4.9c-.6 0-1-.4-1-1V12c0-.6.4-1 1-1h1.5v2.5z"></path><path fill="#4b6c85" d="M4 13.1h.6c.3 0 .5-.2.5-.5V11h.5v2.5h-.7c-.4 0-.7-.2-.9-.4z"></path><path fill="#607d95" d="M15.6 13.5h1.5c.6 0 1-.4 1-1V12c0-.6-.4-1-1-1h-1.5v2.5z"></path><path fill="#4b6c85" d="M18 13.1h-.6c-.3 0-.5-.2-.5-.5V11h-.5v2.5h.8c.3 0 .6-.2.8-.4z"></path><path fill="#d5e5f2" d="m8.1 20.3-4.7 1.6c-1.7.6-2.9 2.2-2.9 4v3.7h21v-3.7c0-1.8-1.2-3.4-2.9-4l-4.7-1.6H8.1z"></path><path fill="#b0c4da" d="M10.5 20.2H8.1l-4.7 1.6c-1.5.5-2.9 2.2-2.9 4v3.8h1.7v-3.7c0-1.2.9-2.3 2-2.6l1.9-.6c.8-.3 1.6-.1 2.2.3.2.1.6.3.7.4.5.3 1.2.3 1.7 0 .9-.5 2.1-1.4 2.1-2.5l-.3-.6h-2zm11 9.3v-3.7c0-.8-.2-1.5-.6-2.1-2.5.3-4.4 2.4-4.4 5v.8h5z"></path><path fill="#b0c4da" d="M.5 29.5v-3.7c0-.8.2-1.5.6-2.1 2.5.3 4.4 2.4 4.4 5v.8h-5z"></path><path fill="#99b5ce" d="M2.2 25.8c0-.6.2-1.2.6-1.6-.5-.3-1.1-.4-1.6-.5-.4.6-.6 1.4-.6 2.1v3.7h1.7l-.1-3.7z"></path><path fill="#b0c4da" d="M10.5 22.7h1v6.7h-1z"></path><path fill="#f0c9ae" d="M8.1 16.9v3.3c0 1.6 2.9 2.9 2.9 2.9s2.9-1.3 2.9-2.9v-3.3H8.1z"></path><path fill="#e2b698" d="M8.1 18.6c.8.5 1.9.9 2.9.9 1.1 0 2.1-.3 2.9-.9V17H8.1v1.6z"></path><path fill="#e2b698" d="M9.7 20.2v-2.1H8.1v2.1c0 1.6 2.9 2.9 2.9 2.9l.8-.4c-.8-.5-2.1-1.4-2.1-2.5z"></path><path fill="#f0c9ae" d="M16.4 7.7v5.4c0 3-2.4 5.5-5.5 5.5-3 0-5.5-2.4-5.5-5.5V7.7"></path><path fill="#e2b698" d="M7.2 13.4v-1c0-.7.6-1.3 1.3-1.2 2.1.4 4.3-.1 6-1.4.3-.2.7 0 .7.3V8.5c0-.3-.4-.5-.7-.3-1.7 1.3-3.9 1.8-6 1.4l-.8-.2c-.2 0-.3.1-.4.1l-.4.1v.2c0 .1-.1.2-.1.4 0 .5-.4.8-.8.8h-.4v2.1c0 1.9 1 3.6 2.5 4.6-.6-1.4-.9-2.8-.9-4.3z"></path><path fill="#8a6845" d="M5.6 11H6c.5 0 .8-.4.8-.8 0-.5.4-.8.8-.8l.9.2c2.1.4 4.3-.1 6-1.4.3-.2.7 0 .7.3v1.7c0 .5.4.8.8.8h.4l.8-2.7c.3-1.2-.7-2.4-1.9-2.4 0-1.5-1.3-2.6-2.8-2.4l-5.8 1c-1.3.2-2.2 1.5-2 2.8l.9 3.7z"></path><path fill="#745539" d="M6.4 7.3c-.2-1.3.7-2.6 2-2.8l5.2-.9c-.4-.1-.7-.2-1.1-.1l-5.8 1c-1.3.2-2.2 1.5-2 2.8l.8 3.7H6c.5 0 .8-.4.8-.8 0-.2.1-.3.1-.4l-.5-2.5zm10.5 1.2c0-.3-.4-.5-.7-.3-.3.2-.7.4-1 .6v1.4c0 .5.4.8.8.8h.4l.4-1.4V8.5z"></path><circle cx="25.4" cy="8.6" r="2.5" fill="#eef2fa" transform="rotate(-45.001 25.414 8.584)"></circle><path fill="#d5e5f2" d="M25.2 10.4c-1-1-1-2.6 0-3.5.3-.3.6-.5 1-.6-.9-.3-1.9-.1-2.6.6-1 1-1 2.6 0 3.5.7.7 1.7.9 2.6.6-.3-.2-.7-.4-1-.6z"></path><path fill="#004463" d="M25.4 11.6c-.8 0-1.6-.3-2.1-.9-.6-.6-.9-1.3-.9-2.1s.3-1.6.9-2.1c1.1-1.1 3.1-1.1 4.2 0 .6.6.9 1.3.9 2.1s-.3 1.6-.9 2.1c-.5.6-1.3.9-2.1.9zm0-5c-.5 0-1 .2-1.4.6s-.6.8-.6 1.4.2 1 .6 1.4c.8.8 2.1.8 2.8 0 .4-.4.6-.9.6-1.4s-.2-1-.6-1.4c-.3-.4-.9-.6-1.4-.6zm1.8 3.8z"></path><path fill="#004463" d="M20.8 13.7c-.1 0-.3 0-.4-.1-.2-.2-.2-.5 0-.7l2.8-2.8c.2-.2.5-.2.7 0s.2.5 0 .7l-2.8 2.8s-.2.1-.3.1zm-3.8.5c-.3.8-1 1.3-1.9 1.3h-2.8c-.3 0-.5.2-.5.5s.2.5.5.5h2.8c1.4 0 2.6-1 2.9-2.3h-1z"></path></svg>
+      </CardDataStats>
+
+      <CardDataStats
+        title="Total Customers"
+        total={data.totalCustomers}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="customer"><path fill="#a3d86b" d="M22.6 22.9l-3-1c-.4 2.4-4.6 4.2-4.6 4.2s-4.1-1.9-4.6-4.2l-3 1c-1.7.6-2.9 2.2-2.9 4v3.7h21v-3.7c0-1.9-1.2-3.5-2.9-4z"></path><path fill="#64bc50" d="M25.5 30.5v-3.7c0-.8-.2-1.5-.6-2.2-2.5.3-4.4 2.4-4.4 5v.8h5zM4.5 30.5v-3.7c0-.8.2-1.5.6-2.2 2.5.3 4.4 2.4 4.4 5v.8h-5z"></path><path fill="#a17852" d="M12.1 20.4c-1.2-.1-2.3-.4-3.5-.7l-1.1-.3V11c0-4.1 3.4-7.5 7.5-7.5s7.5 3.4 7.5 7.5v8.5l-1.1.3c-1.2.3-2.3.5-3.5.7"></path><path fill="#fed8aa" d="M10.4 21.9zM19.6 21.9zM17.9 17.7H12v3.6l-1.6.5C10.8 24.2 15 26 15 26s4.1-1.9 4.6-4.2l-1.6-.5v-3.6zM10.4 21.8z"></path><path fill="#40455a" d="M10.4 22.3c-.2 0-.4-.1-.5-.3v-.2c0-.2.1-.4.3-.5.3-.1.5.1.6.3v.2c0 .2-.1.4-.3.5h-.1z"></path><path fill="#fed8aa" d="M19.6 21.8z"></path><path fill="#40455a" d="M19.6 22.3h-.2c-.2-.1-.3-.3-.3-.5v-.2c.1-.3.4-.4.6-.3.2.1.3.3.3.5v.2c0 .2-.2.3-.4.3z"></path><path fill="#fed8aa" d="M17.9 17.7H12v3.6l-1.6.5C10.9 24.2 15 26 15 26s4.1-1.9 4.6-4.2l-1.6-.5v-3.6z"></path><path fill="#40455a" d="M15 26.5h-.2c-.2-.1-4.4-2-4.9-4.6 0-.2.1-.5.3-.6l1.3-.4v-3.2c0-.3.2-.5.5-.5h5.9c.3 0 .5.2.5.5v3.2l1.3.4c.2.1.4.3.3.6-.5 2.6-4.7 4.5-4.9 4.6H15zm-4-4.4c.6 1.5 2.9 2.8 4 3.3 1.1-.5 3.3-1.9 4-3.3l-1.2-.4c-.2-.1-.3-.3-.3-.5v-3.1h-4.9v3.1c0 .2-.1.4-.3.5l-1.3.4z"></path><path fill="#fed8aa" d="M8.5 11.5c-.6 0-1 .4-1 1v1c0 .6.4 1 1 1h1v-3h-1zM21.5 11.5h-1v3h1c.6 0 1-.4 1-1v-1c0-.6-.4-1-1-1z"></path><g><path fill="#fed8aa" d="M13.5 11.5c-1.1 0-2-.9-2-2 0 1.1-.9 2-2 2V14c0 3 2.5 5.5 5.5 5.5s5.5-2.5 5.5-5.5v-2.5h-7z"></path></g><g><path fill="#fff" d="M29.5 1.5h-4c-.6 0-1 .4-1 1v7c0 .6.4 1 1 1h1v2l2-2h1c.6 0 1-.4 1-1v-7c0-.6-.4-1-1-1zM1.5 1.5h8c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1h-1v2l-3-2h-4c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1zM30.5 22.5h-5c-.6 0-1-.4-1-1v-4c0-.6.4-1 1-1h1v-2l3 2h1c.6 0 1 .4 1 1v4c0 .6-.4 1-1 1z"></path><path fill="#40455a" d="M29.5 19h-3c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h3c.3 0 .5.2.5.5s-.2.5-.5.5zM28.5 21h-2c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h2c.3 0 .5.2.5.5s-.2.5-.5.5zM8.5 4h-6c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h6c.3 0 .5.2.5.5s-.2.5-.5.5zM6.5 6h-4c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h4c.3 0 .5.2.5.5s-.2.5-.5.5zM15 20c-3.3 0-6-2.7-6-6v-2.1c0-.3.2-.5.5-.5s.5.2.5.5V14c0 2.8 2.2 5 5 5s5-2.2 5-5v-2.1c0-.3.2-.5.5-.5s.5.2.5.5V14c0 3.3-2.7 6-6 6zM25.5 31h-21c-.3 0-.5-.2-.5-.5v-3.7c0-2 1.3-3.8 3.2-4.5l4.6-1.5c.3-.1.5.1.6.3s-.1.5-.3.6l-4.6 1.5c-1.5.6-2.5 2-2.5 3.6V30h20v-3.2c0-1.6-1-3-2.5-3.5l-4.7-1.6c-.3-.1-.4-.4-.3-.6.1-.3.4-.4.6-.3l4.7 1.6c1.9.6 3.2 2.4 3.2 4.5v3.7c0 .2-.2.4-.5.4z"></path><path fill="#40455a" d="M25.5 31h-5c-.3 0-.5-.2-.5-.5v-.8c0-2.8 2.1-5.2 4.9-5.5.2 0 .4.1.5.2.4.7.7 1.6.7 2.4v3.7c-.1.3-.3.5-.6.5zM21 30h4v-3.2c0-.5-.1-1.1-.4-1.6-2.1.4-3.7 2.3-3.7 4.5v.3zM9.5 31h-5c-.3 0-.5-.2-.5-.5v-3.7c0-.8.2-1.7.7-2.4.1-.2.3-.3.5-.2 2.8.3 4.9 2.7 4.9 5.5v.8c-.1.3-.3.5-.6.5zM5 30h4v-.3c0-2.2-1.6-4-3.7-4.5-.2.5-.3 1.1-.3 1.6V30zM9.5 15h-1c-.8 0-1.5-.7-1.5-1.5v-1c0-.8.7-1.5 1.5-1.5H9c.3 0 .5.2.5.5s-.2.5-.5.5h-.5c-.3 0-.5.2-.5.5v1c0 .3.2.5.5.5H9v-1c0-.3.2-.5.5-.5s.5.2.5.5v1.5c0 .3-.2.5-.5.5zM21.5 15h-1c-.3 0-.5-.2-.5-.5V13c0-.3.2-.5.5-.5s.5.2.5.5v1h.5c.3 0 .5-.2.5-.5v-1c0-.3-.2-.5-.5-.5h-1c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h1c.8 0 1.5.7 1.5 1.5v1c0 .8-.7 1.5-1.5 1.5z"></path><path fill="#40455a" d="M9.5 12h-1c-.3 0-.5-.2-.5-.5s.2-.5.5-.5h1c.8 0 1.5-.7 1.5-1.5v-1c0-.3.2-.5.5-.5s.5.2.5.5v1c0 1.4-1.1 2.5-2.5 2.5z"></path><path fill="#40455a" d="M20.5 12h-7c-1.4 0-2.5-1.1-2.5-2.5v-1c0-.3.2-.5.5-.5s.5.2.5.5v1c0 .8.7 1.5 1.5 1.5h7c.3 0 .5.2.5.5s-.2.5-.5.5zM26.5 13h-.2c-.2-.1-.3-.3-.3-.5V11h-.5c-.8 0-1.5-.7-1.5-1.5v-7c0-.8.7-1.5 1.5-1.5h4c.8 0 1.5.7 1.5 1.5v7c0 .8-.7 1.5-1.5 1.5h-.8l-1.9 1.9s-.2.1-.3.1zm-1-11c-.3 0-.5.2-.5.5v7c0 .3.2.5.5.5h1c.3 0 .5.2.5.5v.8l1.1-1.1c.1-.1.2-.1.4-.1h1c.3 0 .5-.2.5-.5v-7c0-.4-.2-.6-.5-.6h-4zM8.5 10c-.1 0-.2 0-.3-.1L5.3 8H1.5C.7 8 0 7.3 0 6.5v-4C0 1.7.7 1 1.5 1h8c.8 0 1.5.7 1.5 1.5v4c0 .8-.7 1.5-1.5 1.5H9v1.5c0 .2-.1.4-.3.4 0 .1-.1.1-.2.1zm-7-8c-.3 0-.5.2-.5.5v4c0 .3.2.5.5.5h4c.1 0 .2 0 .3.1L8 8.6V7.5c0-.3.2-.5.5-.5h1c.3 0 .5-.2.5-.5v-4c0-.3-.2-.5-.5-.5h-8z"></path><path fill="#40455a" d="M17.9 20.9c-.2 0-.5-.2-.5-.4 0-.3.2-.5.4-.6 1.2-.1 2.3-.4 3.4-.7l.7-.2v-8c0-3.9-3.1-7-7-7-1.4 0-2.8.4-4 1.3v1.2c.1.8-.6 1.5-1.4 1.5H9v1.5c0 .2-.1.4-.3.4-.1.1-.3.1-.5 0l-.1-.1c-.1.4-.1.8-.1 1.2v8.1l.7.2c1.1.3 2.3.5 3.4.7.3 0 .5.3.4.6 0 .3-.3.5-.6.4-1.2-.1-2.4-.4-3.6-.7l-.9-.3c-.2-.1-.4-.3-.4-.5V11c0-.7.1-1.4.3-2.1 0-.2.2-.3.3-.3H8V7.5c0-.3.2-.5.5-.5h1c.3 0 .5-.2.5-.5V5c0-.2.1-.3.2-.4C11.6 3.6 13.3 3 15 3c4.4 0 8 3.6 8 8v8.5c0 .2-.2.4-.4.5l-1.1.3c-1.1.2-2.3.5-3.6.6.1 0 .1 0 0 0zM30.5 23h-5c-.8 0-1.5-.7-1.5-1.5v-4c0-.8.7-1.5 1.5-1.5h.5v-1.5c0-.2.1-.4.3-.4.2-.1.4-.1.5 0l2.9 1.9h.8c.8 0 1.5.7 1.5 1.5v4c0 .8-.7 1.5-1.5 1.5zm-5-6c-.3 0-.5.2-.5.5v4c0 .3.2.5.5.5h5c.3 0 .5-.2.5-.5v-4c0-.3-.2-.5-.5-.5h-1c-.1 0-.2 0-.3-.1L27 15.4v1.1c0 .3-.2.5-.5.5h-1zM27.5 7c-.3 0-.5-.2-.5-.5v-.3c0-.6.3-1 .7-1.3.2 0 .3-.2.3-.4 0-.3-.2-.5-.5-.5s-.5.2-.5.5-.2.5-.5.5-.5-.2-.5-.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5c0 .6-.3 1.1-.8 1.3-.1.1-.2.2-.2.4v.3c0 .3-.2.5-.5.5zM27.5 9c-.3 0-.5-.2-.5-.5s.2-.5.5-.5.5.2.5.5-.2.5-.5.5z"></path></g></svg>
+      </CardDataStats>
+
+      <CardDataStats
+        title="Total Contacts"
+        total={data.totalContacts}
+      >
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 96 96" id="MessageNotification"><path fill="url(#paint0_linear_963_13616)" fill-rule="evenodd" d="M62.5 24C62.5 17.0964 68.0964 11.5 75 11.5C81.9036 11.5 87.5 17.0964 87.5 24C87.5 30.9036 81.9036 36.5 75 36.5C68.0964 36.5 62.5 30.9036 62.5 24ZM57.8501 20.5C57.6205 21.6309 57.5 22.8014 57.5 24C57.5 33.665 65.335 41.5 75 41.5C76.9214 41.5 78.7704 41.1904 80.5 40.6182V55.0698C80.5 61.9733 74.9036 67.5698 68 67.5698H28.2981C26.261 67.5698 24.3116 68.3984 22.898 69.8651L11.08 82.1267C10.1434 83.0985 8.5 82.4355 8.5 81.0858V33C8.5 26.0964 14.0964 20.5 21 20.5H57.8501ZM59.6993 15.5H21C11.335 15.5 3.5 23.335 3.5 33V81.0858C3.5 86.9346 10.6212 89.8078 14.6801 85.5965L26.498 73.3349C26.9693 72.846 27.6191 72.5698 28.2981 72.5698H68C77.665 72.5698 85.5 64.7347 85.5 55.0698V38.0013C89.7506 34.8086 92.5 29.7254 92.5 24C92.5 14.335 84.665 6.5 75 6.5C68.4199 6.5 62.688 10.1317 59.6993 15.5Z" clip-rule="evenodd"></path><defs><linearGradient id="paint0_linear_963_13616" x1="48" x2="48" y1="6.5" y2="87.599" gradientUnits="userSpaceOnUse"><stop stop-color="#0070ff" class="stopColorff1f00 svgShape"></stop><stop offset="1" stop-color="#5c636c" class="stopColorff8a00 svgShape"></stop></linearGradient></defs></svg>      </CardDataStats>
     </div>
+    <div className='my-4'>
+      <Linegraph />
+    </div>
+    </div>
+    </>
   );
 };
 
