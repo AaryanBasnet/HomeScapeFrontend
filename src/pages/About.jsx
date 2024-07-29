@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import house1 from '../assets/img/houses/house1lg.png';
-import house2 from '../assets/img/houses/house2lg.png';
-import house3 from '../assets/img/houses/house3lg.png';
-import house4 from '../assets/img/houses/house4lg.png';
-import house5 from '../assets/img/houses/house5lg.png';
+// import house1 from '../assets/img/houses/house1lg.png';
+// import house2 from '../assets/img/houses/house2lg.png';
+// import house3 from '../assets/img/houses/house3lg.png';
+// import house4 from '../assets/img/houses/house4lg.png';
+// import house5 from '../assets/img/houses/house5lg.png';
 
 const About = () => {
   const [aboutData, setAboutData] = useState(null);

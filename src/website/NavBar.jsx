@@ -19,7 +19,7 @@ const Navbar = () => {
     return <Loader />; // or a loading spinner
   }
   return (
-    <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-50">
+    <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-10">
       <div className="text-2xl font-dosis font-bold text-black bg-opacity-0">
         <Link to="/" onClick={() => handleSetActive("home")}>HomeScape</Link>
       </div>

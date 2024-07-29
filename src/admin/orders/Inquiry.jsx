@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 const Inquiry = () => {
-  const [inquiry, setInquiry] = useState([]);
+  const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:8080/api/inquiry')
       .then(response => {
-        setInquiry(response.data.data);
+        setInquiries(response.data.data);
         setLoading(false);
       })
       .catch(error => {
-        setError('Error fetching contact messages');
+        setError('Error fetching inquiries');
         setLoading(false);
       });
   }, []);
@@ -23,37 +22,51 @@ const Inquiry = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <>
-      
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-semibold mb-6">Contact Messages</h1>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 border-b">House Name</th>
-                <th className="px-4 py-2 border-b">Agent Name</th>
-                <th className="px-4 py-2 border-b">Customer Name</th>
-                <th className="px-4 py-2 border-b">Email</th>
-                <th className="px-4 py-2 border-b">Message</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inquiry.map((inquiry) => (
-                <tr key={inquiry.id} className="hover:bg-gray-100">
-                  <td className="px-4 py-2 border-b">{inquiry.home.name}</td>
-                  <td className="px-4 py-2 border-b">{inquiry.home.agent.name}</td>
-                  <td className="px-4 py-2 border-b">{inquiry.name}</td>
-                  <td className="px-4 py-2 border-b">{inquiry.email}</td>
-                  <td className="px-4 py-2 border-b">{inquiry.message}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-    </>
+    <div className="m-4">
+      <h1 className="text-3xl font-semibold mb-6">Inquiries</h1>
+      <table className="w-full text-sm text-left text-gray-500">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              House Name
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Agent Name
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Customer Name
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Email
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Message
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {inquiries.map((inquiry) => (
+            <tr key={inquiry.id} className="bg-white border-b hover:bg-gray-50">
+              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                {inquiry.home.name}
+              </td>
+              <td className="px-6 py-4">
+                {inquiry.home.agent.name}
+              </td>
+              <td className="px-6 py-4">
+                {inquiry.name}
+              </td>
+              <td className="px-6 py-4">
+                {inquiry.email}
+              </td>
+              <td className="px-6 py-4">
+                {inquiry.message}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

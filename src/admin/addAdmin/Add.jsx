@@ -1,6 +1,5 @@
 import React from 'react';
 import AddAdmin from './AddAdmin';
-import AddAgent from './AddAgent';
 import AboutForm from './AboutForm';
 
 function Add() {
@@ -9,9 +8,7 @@ function Add() {
       <div className='flex-1'>
         <AddAdmin />
       </div>
-      <div className='flex-1'>
-        <AddAgent />
-      </div>
+      
       <div className='flex-1'>
      
         <AboutForm />

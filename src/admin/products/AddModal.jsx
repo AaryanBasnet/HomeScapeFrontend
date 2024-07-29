@@ -68,7 +68,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       surface: Number(homeData.surface),
       agent: { agentId: Number(homeData.agent.agentId) },
     };
-
+  
     const formData = new FormData();
     formData.append(
       "home",
@@ -77,7 +77,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       })
     );
     formData.append("image", image);
-
+  
     try {
       let response;
       if (selectedHome) {
@@ -90,7 +90,6 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
             },
           }
         );
-        console.log("Home updated successfully");
         toast.success("Home updated successfully");
       } else {
         response = await axios.post(
@@ -102,11 +101,25 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
             },
           }
         );
-        console.log("Home added successfully");
         toast.success("Home added successfully");
       }
       console.log("Response:", response.data);
-
+  
+      // Reset form fields
+      setHomeData({
+        name: "",
+        address: "",
+        price: "",
+        bathrooms: "",
+        bedrooms: "",
+        surface: "",
+        city: "",
+        description: "",
+        type: "",
+        agent: { agentId: "" },
+      });
+      setImage(null);
+  
       closeModal();
       fetchHomes();
     } catch (error) {
@@ -122,7 +135,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       }
     }
   };
-
+  
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -154,7 +167,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="name"
                     value={homeData.name}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -170,7 +183,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="price"
                     value={homeData.price}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -186,7 +199,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="bedrooms"
                     value={homeData.bedrooms}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -202,7 +215,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="bathrooms"
                     value={homeData.bathrooms}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -218,7 +231,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="surface"
                     value={homeData.surface}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-2">
@@ -234,7 +247,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="address"
                     value={homeData.address}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -250,7 +263,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="city"
                     value={homeData.city}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
@@ -266,7 +279,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="type"
                     value={homeData.type}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-2">
@@ -281,7 +294,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="description"
                     value={homeData.description}
                     onChange={handleInputChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <div className="col-span-2 sm:col-span-2">
@@ -296,7 +309,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     id="agent"
                     value={homeData.agent.agentId}
                     onChange={handleAgentSelect}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 block w-full pl-3 pr-10 py-2 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
                   >
                     <option value="">Select an agent</option>
                     {agents.map((agent) => (
@@ -318,7 +331,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
                     name="image"
                     id="image"
                     onChange={handleImageChange}
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 border-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
               </div>

@@ -8,6 +8,7 @@ import {
   HelpCircleIcon,
   House,
   PlusCircleIcon,
+  Plus,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
@@ -46,6 +47,11 @@ const navLinks = [
     link: "/admin/addadmin",
     label: "AddAdmin",
     icon: PlusCircleIcon,
+  },
+  {
+    link: "/admin/addagent",
+    label: "AddAgent",
+    icon: Plus,
   },
 ];
 

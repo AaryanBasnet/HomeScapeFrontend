@@ -110,10 +110,8 @@ const Linegraph = () => {
           throw new Error('Inquiries data is not an array');
         }
 
-        // Get unique home IDs
         const homeIds = [...new Set(inquiries.map(inquiry => inquiry.home.homeId))];
 
-        // Create series for each home ID
         const seriesData = homeIds.map(homeId => {
           const inquiriesPerMonth = inquiries
             .filter(inquiry => inquiry.home.homeId === homeId)

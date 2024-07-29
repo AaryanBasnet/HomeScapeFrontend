@@ -67,51 +67,13 @@ const UserDropdown = () => {
       {dropdownOpen && (
         <div
           id="userDropdown"
-          className="absolute right-0 z-50 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+          className="absolute right-0 z-100 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div>{username}</div>
             <div className="font-medium truncate">{email}</div>
           </div>
-          <ul
-            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="avatarButton"
-          >
-            {roles.includes("ADMIN") && (
-              <li>
-                <Link
-                  to="/admin/dashboard"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Admin Dashboard
-                </Link>
-              </li>
-            )}
-            <li>
-              <Link
-                to="/dashboard"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/settings"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Settings
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/earnings"
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Earnings
-              </Link>
-            </li>
-          </ul>
+          
           <div className="py-1">
             <button
               onClick={handleSignOut}
