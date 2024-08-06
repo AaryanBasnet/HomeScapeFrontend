@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import loginImage from "../assets/img/houses/house1lg.png";
-import Logo from "../assets/img/houses/house2lg.png";
+import loginImage from "../assets/img/house2lg.png";
+import Logo from "../assets/img/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "../website/AuthContext"; // Import the custom hook
+import { useAuth } from "../website/AuthContext"; 
 
 const SignInSignUpForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -13,8 +13,7 @@ const SignInSignUpForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn } = useAuth(); // Use auth context
-
+  const { isLoggedIn, setIsLoggedIn } = useAuth(); 
   useEffect(() => {
     const checkTokenAndRedirect = async () => {
       const refreshToken = localStorage.getItem("refreshToken");
@@ -151,7 +150,7 @@ const SignInSignUpForm = () => {
         ></div>
         <div className="w-full md:w-1/2 p-8">
           <div className="mb-8 text-center">
-            <img src={Logo} alt="Logo" className="w-24 mx-auto" />
+            <img src={Logo} alt="Logo" className="w-30 mx-auto" />
           </div>
           <p className="text-2xl font-bold mb-6 text-center">
             {isSignUp ? "Create your account" : "Welcome back!"}

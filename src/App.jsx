@@ -12,7 +12,7 @@ const UnAuthorized = lazy(() => import("./pages/UnAuthorized"));
 
 import AdminLayout from './admin/AdminLayout';
 import SharedLayout from './pages/SharedLayout';
-import Loader from './website/Loader';  // Adjust the path as necessary
+import Loader from './website/Loader'; 
 
 const queryClient = new QueryClient();
 

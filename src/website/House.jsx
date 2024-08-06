@@ -1,8 +1,7 @@
 import React from 'react';
-import { BiBed, BiBath, BiArea } from 'react-icons/bi';
+import {  BiArea } from 'react-icons/bi';
 import { PiBathtubBold } from "react-icons/pi";
 import { IoBed } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 const House = ({ house }) => {

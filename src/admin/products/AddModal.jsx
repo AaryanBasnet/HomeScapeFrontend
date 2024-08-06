@@ -105,7 +105,6 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       }
       console.log("Response:", response.data);
   
-      // Reset form fields
       setHomeData({
         name: "",
         address: "",

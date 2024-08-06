@@ -20,11 +20,7 @@ const Dashboard = () => {
           axios.get('http://localhost:8080/api/contact/count'),
         ]);
 
-        // Log responses for debugging
-        console.log('Homes Response:', homesRes.data);
-        console.log('Inquiries Response:', inquiriesRes.data);
-        console.log('Customers Response:', customersRes.data);
-        console.log('Contacts Response:', contactsRes.data);
+      
 
         setData({
           totalHomes: homesRes.data.data || '0',
@@ -40,7 +36,6 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  console.log('Dashboard Data:', data); // Add this line to check the state
 
   return (
     <>

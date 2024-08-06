@@ -27,7 +27,7 @@ const AddAgent = () => {
       <button
         onClick={() => {
           setShowModal(true);
-          setEditAgent(null); // Ensure it's a fresh add, not edit
+          setEditAgent(null); 
         }}
         className="bg-indigo-600 text-white px-4 py-2 rounded"
       >
@@ -40,7 +40,7 @@ const AddAgent = () => {
           setShowModal={setShowModal}
           editAgent={editAgent}
           setEditAgent={setEditAgent}
-          fetchAgents={fetchAgents} // Pass the function as a prop
+          fetchAgents={fetchAgents}
         />
       )}
     </div>

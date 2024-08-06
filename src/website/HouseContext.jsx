@@ -65,7 +65,6 @@ const HouseContextProvider = ({ children }) => {
         params.propertyType = property;
       }
   
-      // Split and parse priceRange
       if (!isDefault(priceRange)) {
         const [minStr, maxStr] = priceRange.split('-').map(str => str.trim());
   

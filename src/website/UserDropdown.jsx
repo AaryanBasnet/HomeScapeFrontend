@@ -29,7 +29,6 @@ const UserDropdown = () => {
           setEmail(userData.email);
           setRoles(userData.roles.map(role => role.name));
 
-          // Navigate to signup if the user is an admin
           if (userData.roles.some(role => role.name === "ADMIN")) {
             handleSignOut();
             navigate("/signup");

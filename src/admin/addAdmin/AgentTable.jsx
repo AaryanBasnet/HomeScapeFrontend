@@ -24,7 +24,7 @@ const AgentTable = ({ setEditAgent, setShowModal }) => {
     try {
       await axios.delete(`http://localhost:8080/agent/delete/${agentId}`);
       toast.success('Agent deleted successfully!');
-      fetchAgents(); // Refresh the list after deletion
+      fetchAgents(); 
     } catch (error) {
       console.error('Error deleting agent:', error);
       toast.error('Failed to delete agent. Please try again.');

@@ -8,8 +8,7 @@ import { HouseContext } from './HouseContext';
 
 const Search = () => {
   const { handleClick } = useContext(HouseContext);
-  // const {houses } = useContext(HouseContext)
-  // console.log(houses)
+
   return (
     <div className='px-[30px] py-6 max-w-[1170px] mx-auto flex flex-col justify-between
      lg:flex-row  items-center gap-4 lg:gap-x-3 relative lg:-top-9 lg:shadow-lg

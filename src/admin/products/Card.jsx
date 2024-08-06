@@ -29,13 +29,7 @@ function Card({ home, onEdit, onDelete }) {
             <h2 className="card-title font-dosis font-medium text-lg text-orange-500">
               NRs.{home.price}
             </h2>
-            <motion.button
-              whileHover={{
-                scale: 1.2,
-              }}
-            >
-              <FaRegHeart className="text-red-500" />
-            </motion.button>
+           
           </div>
           <h3 className="font-dosis font-bold mt-1">{home.name}</h3>
           <p className="text-sm font-dosis font-light mt-1">{home.address}</p>

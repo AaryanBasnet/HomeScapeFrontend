@@ -16,7 +16,7 @@ const Navbar = () => {
   };
 
   if (isLoading) {
-    return <Loader />; // or a loading spinner
+    return <Loader />; 
   }
   return (
     <nav className="top-0 left-0 w-full flex items-center justify-between p-4 z-10">

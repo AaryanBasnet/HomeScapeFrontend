@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import backgroundImage from "../assets/img/houses/Object.png";
+import backgroundImage from "../assets/img/Object.png";
 import NavBar from './NavBar';
 import Search from './Search';
 
