@@ -7,6 +7,7 @@ import Krishna from '../assets/img/krishna.png';
 import Saugat from '../assets/img/saugat.png';
 import Akash from '../assets/img/akash.jpg';
 import Aryan from '../assets/img/aaryan.jpeg';
+import { API_BASE_URL } from '../config';
 
 const About = () => {
   const [aboutData, setAboutData] = useState(null);
@@ -16,7 +17,7 @@ const About = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/about');
+        const response = await axios.get(`${API_BASE_URL}/api/about`);
         if (response.data && response.data.data && response.data.data.length > 0) {
           setAboutData(response.data.data[0]);
         } else {

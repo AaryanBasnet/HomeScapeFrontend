@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { API_BASE_URL } from '../../config';
 
 const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   const [homeData, setHomeData] = useState({
@@ -27,7 +28,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
   useEffect(() => {
     async function fetchAgents() {
       try {
-        const response = await axios.get("http://localhost:8080/agent/get");
+        const response = await axios.get(`${API_BASE_URL}/agent/get`);
         if (response.data.statusCode === 200) {
           setAgents(response.data.data);
         } else {
@@ -82,7 +83,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
       let response;
       if (selectedHome) {
         response = await axios.put(
-          `http://localhost:8080/home/update/${selectedHome.homeId}`,
+          `${API_BASE_URL}/home/update/${selectedHome.homeId}`,
           formData,
           {
             headers: {
@@ -93,7 +94,7 @@ const AddModal = ({ isOpen, setIsOpen, selectedHome, fetchHomes }) => {
         toast.success("Home updated successfully");
       } else {
         response = await axios.post(
-          "http://localhost:8080/home/save",
+          `${API_BASE_URL}/home/save`,
           formData,
           {
             headers: {

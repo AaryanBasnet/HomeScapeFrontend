@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import AgentModal from './AgentModal';
 import AgentTable from './AgentTable';
+import { API_BASE_URL } from '../../config';
 
 const AddAgent = () => {
   const [showModal, setShowModal] = useState(false);
@@ -15,7 +16,7 @@ const AddAgent = () => {
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/agent/get');
+      const response = await axios.get(`${API_BASE_URL}/agent/get`);
       setAgents(response.data.data);
     } catch (error) {
       console.error('Error fetching agents:', error);

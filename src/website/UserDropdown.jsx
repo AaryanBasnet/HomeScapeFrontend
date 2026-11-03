@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from "./AuthContext";
 import { FaUser } from "react-icons/fa";
+import { API_BASE_URL } from '../config';
 
 const UserDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -19,7 +20,7 @@ const UserDropdown = () => {
 
       if (userId && token) {
         try {
-          const response = await axios.get(`http://localhost:8080/customer/get/${userId}`, {
+          const response = await axios.get(`${API_BASE_URL}/customer/get/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }

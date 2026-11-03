@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Card from './Card';
 import AddModal from './AddModal';
+import { API_BASE_URL } from '../../config';
 
 const HomeList = () => {
   const [homes, setHomes] = useState([]);
@@ -13,7 +14,7 @@ const HomeList = () => {
   }, []);
 
   const fetchHomes = () => {
-    axios.get('http://localhost:8080/home/get')
+    axios.get(`${API_BASE_URL}/home/get`)
       .then(response => {
         setHomes(response.data.data);
       })
@@ -28,7 +29,7 @@ const HomeList = () => {
   };
 
   const handleDelete = (homeId) => {
-    axios.delete(`http://localhost:8080/home/delete/${homeId}`)
+    axios.delete(`${API_BASE_URL}/home/delete/${homeId}`)
       .then(response => {
         if (response.status === 200) {
           fetchHomes(); 

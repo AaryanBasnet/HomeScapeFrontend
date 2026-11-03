@@ -4,6 +4,7 @@ import { IoBed } from "react-icons/io5";
 import { BiArea } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from '../../config';
 
 function Card({ home, onEdit, onDelete }) {
   return (
@@ -12,7 +13,7 @@ function Card({ home, onEdit, onDelete }) {
         <figure>
           {home.imageData && (
             <img
-              src={`http://localhost:8080/home/image/${home.homeId}`}
+              src={`${API_BASE_URL}/home/image/${home.homeId}`}
               alt={home.name}
               className="w-full h-48 object-cover mb-4 rounded-md"
               onError={(e) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 const AboutForm = () => {
   const [about, setAbout] = useState({ ourMission: '', ourVision: '' });
@@ -12,7 +13,7 @@ const AboutForm = () => {
 
   const fetchAbout = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/about');
+      const response = await axios.get(`${API_BASE_URL}/api/about`);
       if (response.data.data.length > 0) {
         setAbout(response.data.data[0]);
       }
@@ -32,9 +33,9 @@ const AboutForm = () => {
     e.preventDefault();
     try {
       if (about.aboutId) {
-        await axios.put(`http://localhost:8080/api/about/${about.aboutId}`, about);
+        await axios.put(`${API_BASE_URL}/api/about/${about.aboutId}`, about);
       } else {
-        await axios.post('http://localhost:8080/api/about', about);
+        await axios.post(`${API_BASE_URL}/api/about`, about);
       }
       alert('About information saved successfully');
       fetchAbout();

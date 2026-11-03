@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddModal from './AddModal';
 import HomeList from './HomeList';
+import { API_BASE_URL } from '../../config';
 
 function Products() {
   const [homes, setHomes] = useState([]);
@@ -18,7 +19,7 @@ function Products() {
   const fetchHomes = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:8080/home/get');
+      const response = await axios.get(`${API_BASE_URL}/home/get`);
       setHomes(response.data);
       setError(null);
     } catch (error) {
@@ -38,7 +39,7 @@ function Products() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/home/delete/${id}`);
+      await axios.delete(`${API_BASE_URL}/home/delete/${id}`);
       setHomes((prevHomes) => prevHomes.filter((home) => home.id !== id));
      
     } catch (error) {

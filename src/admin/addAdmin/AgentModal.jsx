@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../../config';
 
 const AgentModal = ({ editAgent, setEditAgent, fetchAgents, setShowModal }) => {
   const [name, setName] = useState('');
@@ -18,7 +19,7 @@ const AgentModal = ({ editAgent, setEditAgent, fetchAgents, setShowModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const agentData = { name, phone, image };
-    const url = editAgent ? `http://localhost:8080/agent/update/${editAgent.agentId}` : 'http://localhost:8080/agent/save';
+    const url = editAgent ? `${API_BASE_URL}/agent/update/${editAgent.agentId}` : `${API_BASE_URL}/agent/save`;
 
     try {
       const response = await axios.post(url, agentData, {

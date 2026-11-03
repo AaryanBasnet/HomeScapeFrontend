@@ -4,6 +4,7 @@ import { BiBed, BiBath, BiArea } from "react-icons/bi";
 import ContactAgent from "../website/ContactAgent";
 import axios from 'axios';
 import Loader from "../website/Loader";
+import { API_BASE_URL } from '../config';
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const PropertyDetails = () => {
     const fetchHouseDetails = async () => {
       try {
         if (id) {
-          const response = await axios.get(`http://localhost:8080/home/get/${id}`);
+          const response = await axios.get(`${API_BASE_URL}/home/get/${id}`);
           setHouse(response.data.data);
         }
       } catch (error) {
@@ -76,7 +77,7 @@ const PropertyDetails = () => {
           </div>
           <div className="w-full ">
             <img
-              src={`http://localhost:8080/home/image/${house.homeId}`}
+              src={`${API_BASE_URL}/home/image/${house.homeId}`}
               alt={house.name}
               className="rounded-lg w-full object-cover mb-4"
               onError={(e) => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 const options = {
   legend: {
@@ -102,7 +103,7 @@ const Linegraph = () => {
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/inquiry')
+    axios.get(`${API_BASE_URL}/api/inquiry`)
       .then(response => {
         const inquiries = response.data.data; // Adjust based on actual response structure
 
@@ -115,7 +116,7 @@ const Linegraph = () => {
         const seriesData = homeIds.map(homeId => {
           const inquiriesPerMonth = inquiries
             .filter(inquiry => inquiry.home.homeId === homeId)
-            .filter(inquiry => new Date(inquiry.createdDate[0], inquiry.createdDate[1] - 1, inquiry.createdDate[2]).getFullYear() === 2024)
+            .filter(inquiry => new Date(inquiry.createdDate[0], inquiry.createdDate[1] - 1, inquiry.createdDate[2]).getFullYear() === new Date().getFullYear())
             .reduce((acc, inquiry) => {
               const month = new Date(inquiry.createdDate[0], inquiry.createdDate[1] - 1, inquiry.createdDate[2]).getMonth();
               acc[month]++;

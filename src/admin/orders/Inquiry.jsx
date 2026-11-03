@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 const Inquiry = () => {
   const [inquiries, setInquiries] = useState([]);
@@ -7,7 +8,7 @@ const Inquiry = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/inquiry')
+    axios.get(`${API_BASE_URL}/api/inquiry`)
       .then(response => {
         setInquiries(response.data.data);
         setLoading(false);

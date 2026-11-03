@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../../config';
 
 const AgentTable = ({ setEditAgent, setShowModal }) => {
   const [agents, setAgents] = useState([]);
 
   const fetchAgents = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/agent/get');
+      const response = await axios.get(`${API_BASE_URL}/agent/get`);
       setAgents(response.data.data);
     } catch (error) {
       console.error('Error fetching agents:', error);
@@ -22,7 +23,7 @@ const AgentTable = ({ setEditAgent, setShowModal }) => {
     }
 
     try {
-      await axios.delete(`http://localhost:8080/agent/delete/${agentId}`);
+      await axios.delete(`${API_BASE_URL}/agent/delete/${agentId}`);
       toast.success('Agent deleted successfully!');
       fetchAgents(); 
     } catch (error) {

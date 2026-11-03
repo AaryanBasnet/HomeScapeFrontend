@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from '../config';
 
 const ContactAgent = ({ homeId }) => {
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const ContactAgent = ({ homeId }) => {
       }
 
       const response = await axios.post(
-        'http://localhost:8080/api/inquiry',
+        `${API_BASE_URL}/api/inquiry`,
         { ...formData, homeId },
         {
           headers: {
