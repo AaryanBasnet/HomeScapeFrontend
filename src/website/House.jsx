@@ -3,6 +3,7 @@ import {  BiArea } from 'react-icons/bi';
 import { PiBathtubBold } from "react-icons/pi";
 import { IoBed } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 
 const House = ({ house }) => {
   const { homeId, name, type, city, address, price, bedrooms, bathrooms, surface, imageData } = house;
@@ -13,7 +14,7 @@ const House = ({ house }) => {
         <figure>
           {imageData && (
             <img
-              src={`http://localhost:8080/home/image/${homeId}`}
+              src={`${API_BASE_URL}/home/image/${homeId}`}
               alt={name}
               className="w-full h-48 object-cover mb-4 rounded-md"
               onError={(e) => {

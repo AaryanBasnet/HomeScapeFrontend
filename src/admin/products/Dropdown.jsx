@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 export default function Dropdown({ onSelect, selectedOption }) {
   const [agents, setAgents] = useState([]);
@@ -7,7 +8,7 @@ export default function Dropdown({ onSelect, selectedOption }) {
   useEffect(() => {
     async function fetchAgents() {
       try {
-        const response = await axios.get('http://localhost:8080/agent/get');
+        const response = await axios.get(`${API_BASE_URL}/agent/get`);
         if (response.data.statusCode === 200) {
           setAgents(response.data.data);
         } else {

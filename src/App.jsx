@@ -19,11 +19,18 @@ const queryClient = new QueryClient();
 const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken) {
       setIsLoggedIn(true);
+    }
+    // The roles saved at login. This only decides which screens to show; the server is what must enforce access.
+    try {
+      setIsAdmin(JSON.parse(localStorage.getItem("roles") || "[]").includes("ADMIN"));
+    } catch {
+      setIsAdmin(false);
     }
     setLoading(false);
   }, []);
@@ -110,10 +117,14 @@ const App = () => {
     },
     {
       path: "/admin/*",
-      element: isLoggedIn ? (
+      element: !isLoggedIn ? (
+        <SignInSignUpForm />
+      ) : isAdmin ? (
         <AdminLayout />
       ) : (
-        <SignInSignUpForm />
+        <Suspense fallback={<Loader />}>
+          <UnAuthorized />
+        </Suspense>
       ),
     },
     {

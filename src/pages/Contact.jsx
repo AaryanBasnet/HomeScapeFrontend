@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_BASE_URL } from '../config';
 const Contact = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Contact = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/contact',
+        `${API_BASE_URL}/api/contact`,
         {
           name,
           email,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 export const HouseContext = createContext();
 
@@ -22,7 +23,7 @@ const HouseContextProvider = ({ children }) => {
   const fetchHouses = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8080/home/get');
+      const response = await axios.get(`${API_BASE_URL}/home/get`);
       setHouses(response.data.data);
     } catch (error) {
       console.error('Error fetching homes:', error);
@@ -33,7 +34,7 @@ const HouseContextProvider = ({ children }) => {
 
   const fetchCities = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/home/cities');
+      const response = await axios.get(`${API_BASE_URL}/home/cities`);
       const cities = ['Location (any)', ...response.data.data];
       setCities(cities);
     } catch (error) {
@@ -43,7 +44,7 @@ const HouseContextProvider = ({ children }) => {
 
   const fetchProperties = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/home/properties');
+      const response = await axios.get(`${API_BASE_URL}/home/properties`);
       const properties = ['Property type (any)', ...response.data.data];
       setProperties(properties);
     } catch (error) {
@@ -85,7 +86,7 @@ const HouseContextProvider = ({ children }) => {
   
       console.log('Filtering with params:', params);
   
-      const response = await axios.get('http://localhost:8080/home/filter', {
+      const response = await axios.get(`${API_BASE_URL}/home/filter`, {
         params: params
       });
       setHouses(response.data.data);

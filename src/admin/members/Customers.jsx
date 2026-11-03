@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 const Customers = () => {
   const [homeData, setHomeData] = useState({
@@ -22,7 +23,7 @@ const Customers = () => {
   useEffect(() => {
     async function fetchAgents() {
       try {
-        const response = await axios.get('http://localhost:8080/agent/get');
+        const response = await axios.get(`${API_BASE_URL}/agent/get`);
         if (response.data.statusCode === 200) {
           setAgents(response.data.data);
         } else {
@@ -42,7 +43,7 @@ const Customers = () => {
 
   const fetchHomes = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/home/get');
+      const response = await axios.get(`${API_BASE_URL}/home/get`);
       setHomes(response.data.data);
     } catch (error) {
       console.error('Failed to fetch homes:', error);
@@ -83,7 +84,7 @@ const Customers = () => {
     formData.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:8080/home/save', formData, {
+      const response = await axios.post(`${API_BASE_URL}/home/save`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

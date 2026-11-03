@@ -6,6 +6,7 @@ import Logo from "../assets/img/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../website/AuthContext"; 
+import { API_BASE_URL } from '../config';
 
 const SignInSignUpForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -22,7 +23,7 @@ const SignInSignUpForm = () => {
       if (refreshToken && userId) {
         try {
           const response = await axios.post(
-            "http://localhost:8080/api/auth/refresh",
+            `${API_BASE_URL}/api/auth/refresh`,
             null,
             {
               headers: {
@@ -49,7 +50,7 @@ const SignInSignUpForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         {
           username,
           password,
@@ -88,7 +89,7 @@ const SignInSignUpForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/register/user",
+        `${API_BASE_URL}/api/auth/register/user`,
         {
           username: username,
           password: password,

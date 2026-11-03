@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 
 const Inquiry = () => {
@@ -8,7 +9,7 @@ const Inquiry = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/inquiry')
+    axios.get(`${API_BASE_URL}/api/inquiry`)
       .then(response => {
         setInquiry(response.data.data);
         console.log(response.data.data);

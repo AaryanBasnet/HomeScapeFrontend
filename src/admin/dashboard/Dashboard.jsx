@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardDataStats from './CardDataStats';
 import Linegraph from './Linegraph';
+import { API_BASE_URL } from '../../config';
 const Dashboard = () => {
   const [data, setData] = useState({
     totalHomes: '0',
@@ -14,10 +15,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [homesRes, inquiriesRes, customersRes, contactsRes] = await Promise.all([
-          axios.get('http://localhost:8080/home/count'),
-          axios.get('http://localhost:8080/api/inquiry/count'),
-          axios.get('http://localhost:8080/customer/count'),
-          axios.get('http://localhost:8080/api/contact/count'),
+          axios.get(`${API_BASE_URL}/home/count`),
+          axios.get(`${API_BASE_URL}/api/inquiry/count`),
+          axios.get(`${API_BASE_URL}/customer/count`),
+          axios.get(`${API_BASE_URL}/api/contact/count`),
         ]);
 
       
